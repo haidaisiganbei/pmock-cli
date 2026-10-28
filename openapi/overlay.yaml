@@ -282,4 +282,4 @@ commands:
     path: [rpa, task, add]
     risk: write
     examples:
-      - pmock-cli rpa task add --template-id 456 --name daily --json '{"taskList":[...]}'
+      - pmock-cli rpa task add --template-id 456 --name daily --json '{"taskList":[{"phoneId":123}]}'
