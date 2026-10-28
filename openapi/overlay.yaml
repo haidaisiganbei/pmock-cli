@@ -1,0 +1,285 @@
+# Product-layer decisions for the generated PMOCK CLI catalog.
+#
+# Every operation in openapi/pmock-openapi.yaml must appear exactly once.
+# `op` is the stable "METHOD /path" key; `path` is the user-facing command.
+# `risk` drives warnings (costly) and confirmation (destructive). Operations
+# marked internal are still callable but hidden from help; they are building
+# blocks for higher-level commands added by hand.
+commands:
+  - op: GET /open/api/product/list
+    path: [product, list]
+    aliases: [ls]
+    risk: read
+    examples:
+      - pmock-cli product list
+
+  - op: POST /open/api/phone/create
+    path: [phone, create]
+    risk: costly
+    examples:
+      - pmock-cli phone create --spu-id 123 --sku-id 456 --num 1
+      - pmock-cli phone create --spu-id 123 --sku-id 456 --json '{"tagIds":[1,2]}'
+
+  - op: GET /open/api/phone/list
+    path: [phone, list]
+    aliases: [ls]
+    risk: read
+    examples:
+      - pmock-cli phone list --page-size 10
+      - pmock-cli phone list --name-or-code demo
+      - pmock-cli phone list --status 1 --page-size 100
+
+  - op: POST /open/api/phone/authorize
+    path: [phone, authorize]
+    risk: write
+
+  - op: POST /open/api/phone/unauthorize
+    path: [phone, unauthorize]
+    risk: write
+
+  - op: GET /open/api/team/member/list
+    path: [team, members]
+    risk: read
+
+  - op: GET /open/api/phone/resolution/list
+    path: [phone, resolutions]
+    risk: read
+
+  - op: GET /open/api/phone/task/status
+    path: [phone, task-status]
+    risk: read
+    examples:
+      - pmock-cli phone task-status --phone-id 123 --operate-type powerOn
+
+  - op: POST /open/api/network/detect
+    path: [network, detect]
+    risk: read
+
+  - op: POST /open/api/phone/setNetwork
+    path: [phone, network-set]
+    risk: write
+
+  - op: POST /open/api/phone/remove
+    path: [phone, remove]
+    aliases: [delete, rm]
+    risk: destructive
+
+  - op: POST /open/api/phone/start
+    path: [phone, start]
+    risk: write
+    examples:
+      - pmock-cli phone start --id 123
+
+  - op: POST /open/api/phone/stop
+    path: [phone, stop]
+    risk: write
+    examples:
+      - pmock-cli phone stop --id 123
+
+  - op: POST /open/api/phone/restart
+    path: [phone, restart]
+    risk: write
+
+  - op: POST /open/api/phone/reset
+    path: [phone, reset]
+    risk: destructive
+
+  - op: POST /open/api/phone/oneNew
+    path: [phone, new]
+    aliases: [one-new]
+    risk: destructive
+
+  - op: POST /open/api/phone/clear
+    path: [phone, clear]
+    risk: write
+
+  - op: POST /open/api/phone/batchRenew
+    path: [phone, renew]
+    risk: costly
+
+  - op: POST /open/api/phone/getAdbInfo
+    path: [phone, adb]
+    risk: read
+
+  - op: POST /open/api/phone/file/scan
+    path: [phone, file, scan]
+    risk: read
+
+  - op: POST /open/api/phone/file/download
+    path: [phone, file, download]
+    risk: read
+
+  - op: POST /open/api/phone/minio/init/task
+    path: [phone, file, upload-init]
+    risk: write
+    internal: true
+
+  - op: POST /open/api/phone/completeAndPush
+    path: [phone, file, upload-push]
+    risk: write
+    internal: true
+
+  - op: POST /open/api/phone/getRemoteToken
+    path: [phone, remote-token]
+    risk: read
+
+  - op: POST /open/api/app/list
+    path: [app, list]
+    aliases: [ls]
+    risk: read
+
+  - op: GET /open/api/app/categoryList
+    path: [app, categories]
+    risk: read
+
+  - op: POST /open/api/app/install
+    path: [app, install]
+    risk: write
+
+  - op: POST /open/api/app/listUpgradeApp
+    path: [app, upgrades]
+    risk: read
+
+  - op: POST /open/api/app/operate
+    path: [app, operate]
+    risk: write
+
+  - op: POST /open/api/task/info/list
+    path: [task, list]
+    aliases: [ls]
+    risk: read
+
+  - op: POST /open/api/brand/list
+    path: [brand, list]
+    aliases: [ls]
+    risk: read
+
+  - op: GET /open/api/network/list
+    path: [network, list]
+    aliases: [ls]
+    risk: read
+
+  - op: POST /open/api/getPhoneModelList
+    path: [phone, models]
+    risk: read
+
+  - op: GET /open/api/rpa/template/getMarkList
+    path: [rpa, template, market]
+    risk: read
+
+  - op: GET /open/api/rpa/template/getList
+    path: [rpa, template, list]
+    aliases: [ls]
+    risk: read
+
+  - op: POST /open/api/rpa/template/collect
+    path: [rpa, template, collect]
+    risk: write
+
+  - op: POST /open/api/rpa/template/delete
+    path: [rpa, template, delete]
+    risk: destructive
+
+  - op: GET /open/api/rpa/task/getList
+    path: [rpa, task, list]
+    aliases: [ls]
+    risk: read
+
+  - op: GET /open/api/rpa/task/getInfo/{id}
+    path: [rpa, task, get]
+    risk: read
+    examples:
+      - pmock-cli rpa task get --id 123
+
+  - op: GET /open/api/rpa/task/getDetailList
+    path: [rpa, task, details]
+    risk: read
+
+  - op: POST /open/api/rpa/task/retryTask
+    path: [rpa, task, retry]
+    risk: write
+
+  - op: POST /open/api/rpa/task/retryDetailTask
+    path: [rpa, task, retry-detail]
+    risk: write
+
+  - op: POST /open/api/rpa/task/update
+    path: [rpa, task, update]
+    risk: write
+
+  - op: POST /open/api/rpa/task/updateDetail
+    path: [rpa, task, update-detail]
+    risk: write
+
+  - op: POST /open/api/rpa/task/stop
+    path: [rpa, task, stop]
+    risk: write
+
+  - op: POST /open/api/rpa/task/stopDetail
+    path: [rpa, task, stop-detail]
+    risk: write
+
+  - op: POST /open/api/rpa/task/delete
+    path: [rpa, task, delete]
+    risk: destructive
+
+  - op: POST /open/api/rpa/task/deleteDetail
+    path: [rpa, task, delete-detail]
+    risk: destructive
+
+  - op: POST /open/api/phone/action/click
+    path: [phone, action, click]
+    aliases: [tap]
+    risk: write
+    examples:
+      - pmock-cli phone action click --code ABC123 --pos-type 2 --pos 100,200
+      - pmock-cli phone action click --code ABC123 --pos-type 1 --query "text=登录,index=0"
+
+  - op: POST /open/api/phone/action/doubleClick
+    path: [phone, action, double-click]
+    risk: write
+
+  - op: POST /open/api/phone/action/swipe
+    path: [phone, action, swipe]
+    risk: write
+
+  - op: POST /open/api/phone/action/drag
+    path: [phone, action, drag]
+    risk: write
+
+  - op: POST /open/api/phone/action/input
+    path: [phone, action, input]
+    risk: write
+
+  - op: POST /open/api/phone/action/longClick
+    path: [phone, action, long-click]
+    risk: write
+
+  - op: POST /open/api/phone/action/app
+    path: [phone, action, app]
+    risk: write
+
+  - op: POST /open/api/phone/action/task/status
+    path: [phone, action, status]
+    risk: read
+
+  - op: POST /open/api/phone/screenCap
+    path: [phone, screen]
+    aliases: [screenshot]
+    risk: read
+    examples:
+      - pmock-cli phone screen --id 123
+
+  - op: POST /open/api/getCpyConnect
+    path: [phone, cpy-connect]
+    risk: read
+
+  - op: POST /open/api/getRemoteComponentToken
+    path: [phone, stream-token]
+    risk: read
+
+  - op: POST /open/api/rpa/task/add
+    path: [rpa, task, add]
+    risk: write
+    examples:
+      - pmock-cli rpa task add --template-id 456 --name daily --json '{"taskList":[...]}'

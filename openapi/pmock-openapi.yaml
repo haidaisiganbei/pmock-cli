@@ -1,0 +1,5848 @@
+openapi: 3.0.1
+# info:
+#   title: 默认模块
+#   description: ''
+#   version: 1.0.0
+# tags: []
+paths:
+  /open/api/product/list:
+    get:
+      summary: 获取商品列表
+      deprecated: false
+      description: 获取商品信息列表
+      tags: [商品]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RListProductInfoVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  - spuId: 0
+                    spuName: ''
+                    skuList:
+                      - skuId: 0
+                        skuName: ''
+                        chargeType: 0
+                        cycle: 0
+                        cycleName: ''
+                        isAutoRenewal: false
+                        cyclePrice: 0
+                        skuExtraPriceList:
+                          - id: 0
+                            name: ''
+                            price: 0
+                            cycleName: ''
+                status: ''
+      security: []
+  /open/api/phone/create:
+    post:
+      summary: 创建手机
+      deprecated: false
+      description: 创建手机
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneCreateReqVOCreate'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RListPhoneInfoResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data: null
+                status: ''
+      security: []
+  /open/api/phone/list:
+    get:
+      summary: 获取手机列表
+      deprecated: false
+      description: 分页获取手机列表
+      tags: [手机操作]
+      parameters:
+        - name: nameOrCode
+          in: query
+          description: 手机名称/手机编号
+          required: false
+          schema:
+            type: string
+            maxLength: 32
+        - name: spuId
+          in: query
+          description: 商品 SPU ID
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: skuId
+          in: query
+          description: 版本ID
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: status
+          in: query
+          description: 手机状态
+          required: false
+          schema:
+            type: integer
+        - name: authorizeUserIds
+          in: query
+          description: >-
+            授权用户 ID 列表，取当前接口返回结果中的 `userId` 值
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: expireStatus
+          in: query
+          description: 计费(过期)状态：0=已经过期，1=正常
+          required: false
+          schema:
+            type: integer
+        - name: skuName
+          in: query
+          description: 版本
+          required: false
+          schema:
+            type: string
+        - name: networkId
+          in: query
+          description: 网络ID
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: groupId
+          in: query
+          description: 手机分组ID
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: groupCode
+          in: query
+          description: 手机系统分组编号
+          required: false
+          schema:
+            type: string
+        - name: groupType
+          in: query
+          description: 手机分组类型
+          required: false
+          schema:
+            type: string
+        - name: realResolution
+          in: query
+          description: >-
+            是否为真机分辨率：0=否，1=是
+          required: false
+          schema:
+            type: integer
+        - name: tagIds
+          in: query
+          description: 标签ID列表，筛选包含这些标签的设备（取并集）
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: pageSize
+          in: query
+          description: |-
+            分页大小
+            每页显示记录数
+            默认为1条,单次查询最大条数为:1
+          required: false
+          schema:
+            type: integer
+        - name: pageNum
+          in: query
+          description: 当前页数
+          required: false
+          schema:
+            type: integer
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfoPhonePageListResVO'
+              example:
+                traceId: ''
+                total: 0
+                rows:
+                  - id: 0
+                    name: ''
+                    groupId: 0
+                    groupName: ''
+                    code: ''
+                    spuId: 0
+                    spuName: ''
+                    skuId: 0
+                    phoneModel: ''
+                    phoneBrand: ''
+                    adbIp: ''
+                    adbPort: ''
+                    adbPassword: ''
+                    payType: 0
+                    skuName: ''
+                    cycleName: ''
+                    cycleEnum: ''
+                    expireStatus: 0
+                    networkId: 0
+                    channel: ''
+                    powerOnTime: ''
+                    powerOffTime: ''
+                    expireTime: ''
+                    expireDuration: ''
+                    nextPayTime: ''
+                    status: 0
+                    remark: ''
+                    userId: 0
+                    createUser: ''
+                    createTime: ''
+                    updateTime: ''
+                    networkResVO:
+                      host: ''
+                      port: 0
+                      account: ''
+                      password: ''
+                      region: ''
+                      num: 0
+                      countryCode: ''
+                      countryName: ''
+                      type: ''
+                      timezone: ''
+                      language: ''
+                      ip: ''
+                      latitude: ''
+                      longitude: ''
+                      bindCount: 0
+                      status: 0
+                      detectDataType: 0
+                      groupId: 0
+                      remark: ''
+                    authorizeResVO:
+                      avatar: ''
+                      name: ''
+                      userId: 0
+                      email: ''
+                    authList:
+                      - avatar: ''
+                        name: ''
+                        userId: 0
+                        email: ''
+                    cycle: 0
+                code: 0
+                msg: ''
+      security: []
+  /open/api/phone/authorize:
+    post:
+      summary: 授权手机给团队成员
+      deprecated: false
+      description: 批量授权手机给团队成员，手机 ID 和用户 ID 列表最多各 50 个
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenApiPhoneAuthorizeReqVO'
+              description: ''
+            example:
+              ids: [1, 2]
+              userIds: [1001, 1002]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data: null
+                status: finish
+      security: []
+  /open/api/phone/unauthorize:
+    post:
+      summary: 取消团队成员的手机授权
+      deprecated: false
+      description: 批量取消团队成员的手机授权，手机 ID 和用户 ID 列表最多各 50 个
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenApiPhoneAuthorizeReqVO'
+              description: ''
+            example:
+              ids: [1, 2]
+              userIds: [1001, 1002]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data: null
+                status: finish
+      security: []
+  /open/api/team/member/list:
+    get:
+      summary: 获取团队成员列表
+      deprecated: false
+      description: 获取团队成员及其角色、已授权手机列表
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RListOpenApiTeamMemberResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  - userId: 1001
+                    email: user@example.com
+                    nickName: Member
+                    isBoss: false
+                    roleId: 1
+                    roleName: Member
+                    authPhones:
+                      - phoneId: 1
+                        code: PM001
+                        name: Phone 1
+                status: finish
+      security: []
+  /open/api/phone/resolution/list:
+    get:
+      summary: 获取手机分辨率列表
+      deprecated: false
+      description: 获取手机分辨率列表
+      tags: [手机操作]
+      parameters:
+        - name: status
+          in: query
+          description: >-
+            手机状态：1=正常，2=重启，4=关机，41=开机，6=重置，7=一键新机
+          required: false
+          schema:
+            type: integer
+        - name: spuId
+          in: query
+          description: 商品 SPU ID
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RListPhoneResolutionListResVO'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      - screenWidth: ''
+                        screenHeight: ''
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      - screenWidth: ''
+                        screenHeight: ''
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      - screenWidth: ''
+                        screenHeight: ''
+                    status: ''
+                '4':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      - screenWidth: ''
+                        screenHeight: ''
+                    status: ''
+      security: []
+  /open/api/phone/task/status:
+    get:
+      summary: 获取手机任务状态
+      deprecated: false
+      description: 查询手机任务状态
+      tags: [手机操作]
+      parameters:
+        - name: operateType
+          in: query
+          description: 手机操作类型:开机-powerOn，重置-reset、重启-restart、一键新机-renew
+          required: false
+          schema:
+            type: string
+        - name: phoneId
+          in: query
+          description: 手机id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RPhoneTaskStatusResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  taskStatus: 0
+                  taskStatusName: ''
+                  phoneStatus: 0
+                  phoneStatusName: ''
+                status: ''
+      security: []
+  /open/api/network/detect:
+    post:
+      summary: 网络检测
+      deprecated: false
+      description: ''
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NetworkDetectReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RCheckNetworkResVO'
+      security: []
+  /open/api/phone/setNetwork:
+    post:
+      summary: 手机网络设置
+      deprecated: false
+      description: 手机网络设置
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneSetNetworkReqVOUpdate'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data: null
+                status: ''
+      security: []
+  /open/api/phone/remove:
+    post:
+      summary: 删除手机
+      deprecated: false
+      description: 删除手机
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneReqVODelete'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data: null
+                status: ''
+      security: []
+  /open/api/phone/start:
+    post:
+      summary: 开机
+      deprecated: false
+      description: 手机开机
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneReqVOUpdate'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RPhoneStartResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  screenWidth: ''
+                  screenHeight: ''
+                  taskId: 0
+                status: ''
+      security: []
+  /open/api/phone/stop:
+    post:
+      summary: 关机
+      deprecated: false
+      description: 手机关机
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RApiTaskResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  taskId: 0
+                status: ''
+      security: []
+  /open/api/phone/restart:
+    post:
+      summary: 重启手机
+      deprecated: false
+      description: 重启手机
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RApiTaskResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  taskId: 0
+                status: ''
+      security: []
+  /open/api/phone/reset:
+    post:
+      summary: 恢复出厂设置
+      deprecated: false
+      description: 恢复出厂设置
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RApiTaskResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  taskId: 0
+                status: ''
+      security: []
+  /open/api/phone/oneNew:
+    post:
+      summary: 一键新机
+      deprecated: false
+      description: 一键新机
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RApiTaskResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  taskId: 0
+                status: ''
+      security: []
+  /open/api/phone/clear:
+    post:
+      summary: 手机加速
+      deprecated: false
+      description: 手机加速
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data: null
+                status: ''
+      security: []
+  /open/api/phone/batchRenew:
+    post:
+      summary: 批量续费手机
+      deprecated: false
+      description: 批量续费手机
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneBatchOpReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data: null
+                status: ''
+      security: []
+  /open/api/phone/getAdbInfo:
+    post:
+      summary: 获取 ADB 信息
+      deprecated: false
+      description: 获取ADB信息
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneGetAdbInfoVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RPhoneAdbInfoResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  phoneId: 0
+                  adbIp: ''
+                  adbPort: ''
+                  adbPassword: ''
+                status: ''
+      security: []
+  /open/api/phone/file/scan:
+    post:
+      summary: 扫描手机文件
+      deprecated: false
+      description: 手机文件目录扫描
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiPhoneFileScanReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RApiPhoneFileScanPageResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  parentDir: ''
+                  fileList:
+                    traceId: ''
+                    total: 0
+                    rows:
+                      - path: ''
+                        name: ''
+                        type: 0
+                        size: 0
+                        convertSize: ''
+                    code: 0
+                    msg: ''
+                status: ''
+      security: []
+  /open/api/phone/file/download:
+    post:
+      summary: 下载手机文件
+      deprecated: false
+      description: 手机文件下载到本地
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiPhoneFileDownloadReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RApiPhoneFileDownloadResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  downId: ''
+                  taskId: 0
+                status: ''
+      security: []
+  /open/api/phone/minio/init/task:
+    post:
+      summary: 初始化上传任务
+      deprecated: false
+      description: 初始化上传任务
+      tags: [文件上传操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadTaskInitReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RUploadTaskInfoVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  finished: false
+                  uploadType: ''
+                  taskRecord:
+                    teamId: 0
+                    uploadId: ''
+                    fileIdentifier: ''
+                    fileName: ''
+                    bucketName: ''
+                    objectKey: ''
+                    totalSize: 0
+                    chunkSize: 0
+                    chunkNum: 0
+                    expireTime: ''
+                    uploadInfo:
+                      - partNumber: 0
+                        uploadUrl: ''
+                    exitPartList:
+                      - partNumber: 0
+                        lastModified: ''
+                        eTag: ''
+                        size: 0
+                status: ''
+      security: []
+  /open/api/phone/completeAndPush:
+    post:
+      summary: 完成上传并推送
+      deprecated: false
+      description: 合并分片&推送到手机
+      tags: [文件上传操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiUploadMinIOReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RApiUploadFileResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  phoneId: 0
+                  envFileId: 0
+                  taskId: 0
+                status: ''
+      security: []
+  /open/api/phone/getRemoteToken:
+    post:
+      summary: 获取远程连接Token
+      deprecated: false
+      description: 获取远程连接Token
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiRemoteTokenReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RListApiRemoteTokenResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  - phoneId: 0
+                    teamId: 0
+                    status: 0
+                    token: {}
+                    errorMsg: ''
+                    chargeType: 0
+                    nextPayTime: ''
+                status: ''
+      security: []
+  /open/api/app/list:
+    post:
+      summary: 获取应用列表
+      deprecated: false
+      description: 获取应用列表
+      tags: [应用操作]
+      parameters:
+        - name: pageSize
+          in: query
+          description: |-
+            分页大小
+            每页显示记录数
+            默认为1条,单次查询最大条数为:1
+          required: false
+          schema:
+            type: integer
+        - name: pageNum
+          in: query
+          description: 当前页数
+          required: false
+          schema:
+            type: integer
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneAppListReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfoAppListV2ResVO'
+              example:
+                traceId: ''
+                total: 0
+                rows:
+                  - id: 0
+                    apkName: ''
+                    apkPkg: ''
+                    apkIconUrl: ''
+                    installStatus: 0
+                    cateCode: 0
+                    weight: 0
+                    needUpdate: false
+                    appVersionList:
+                      - id: 0
+                        apkVersionName: ''
+                        apkVersionCode: 0
+                        installStatus: 0
+                        size: 0
+                        shelfStatus: 0
+                        md5: ''
+                    shelfStatus: 0
+                code: 0
+                msg: ''
+      security: []
+  /open/api/app/categoryList:
+    get:
+      summary: 获取应用分类列表
+      deprecated: false
+      description: 获取应用分类列表
+      tags: [应用操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RListAppCategoryVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  - code: 0
+                    name: ''
+                status: ''
+      security: []
+  /open/api/app/install:
+    post:
+      summary: 手机安装应用
+      deprecated: false
+      description: 手机安装应用
+      tags: [应用操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneAppInstallReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RApiTaskResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  taskId: 0
+                status: ''
+      security: []
+  /open/api/app/listUpgradeApp:
+    post:
+      summary: 获取可升级应用列表
+      deprecated: false
+      description: 获取可升级应用列表
+      tags: [应用操作]
+      parameters:
+        - name: pageSize
+          in: query
+          description: |-
+            分页大小
+            每页显示记录数
+            默认为1条,单次查询最大条数为:1
+          required: false
+          schema:
+            type: integer
+        - name: pageNum
+          in: query
+          description: 当前页数
+          required: false
+          schema:
+            type: integer
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfoAppListV2ResVO'
+              example:
+                traceId: ''
+                total: 0
+                rows:
+                  - id: 0
+                    apkName: ''
+                    apkPkg: ''
+                    apkIconUrl: ''
+                    installStatus: 0
+                    cateCode: 0
+                    weight: 0
+                    needUpdate: false
+                    appVersionList:
+                      - id: 0
+                        apkVersionName: ''
+                        apkVersionCode: 0
+                        installStatus: 0
+                        size: 0
+                        shelfStatus: 0
+                        md5: ''
+                    shelfStatus: 0
+                code: 0
+                msg: ''
+      security: []
+  /open/api/app/operate:
+    post:
+      summary: 手机应用操作
+      deprecated: false
+      description: 操作应用（启动/停止/重启/卸载）
+      tags: [应用操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneAppOperateReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data: null
+                status: ''
+      security: []
+  /open/api/task/info/list:
+    post:
+      summary: 获取任务信息列表
+      deprecated: false
+      description: 批量查询任务信息（每次最多查询 100 条）
+      tags: [任务操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskStatusListReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RListTaskInfoResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  - id: 0
+                    phoneId: 0
+                    teamId: 0
+                    userId: 0
+                    opType: ''
+                    apkPkg: ''
+                    apkVersionCode: 0
+                    downloadUrl: ''
+                    status: 0
+                    startTime: ''
+                    endTime: ''
+                    remark: ''
+                status: ''
+      security: []
+  /open/api/brand/list:
+    post:
+      summary: 获取品牌列表
+      deprecated: false
+      description: 获取支持的手机品牌列表
+      tags: [商品]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneBrandListReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RListPhoneBrandListResVO'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      - brand: ''
+                        resolutions:
+                          - width: 0
+                            height: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      - brand: ''
+                        resolutions:
+                          - width: 0
+                            height: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      - brand: ''
+                        resolutions:
+                          - width: 0
+                            height: 0
+                    status: ''
+                '4':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      - brand: ''
+                        resolutions:
+                          - width: 0
+                            height: 0
+                    status: ''
+      security: []
+  /open/api/network/list:
+    get:
+      summary: 获取网络列表
+      deprecated: false
+      description: ''
+      tags: [网络操作]
+      parameters:
+        - name: host
+          in: query
+          description: >-
+            代理网络 IP/域名，取当前接口返回结果中的 `host` 值
+          required: false
+          schema:
+            type: string
+        - name: num
+          in: query
+          description: 当前接口返回结果中包含的 `num` 值
+          required: false
+          schema:
+            type: integer
+        - name: remark
+          in: query
+          description: 备注
+          required: false
+          schema:
+            type: string
+        - name: groupId
+          in: query
+          description: >-
+            当前接口返回结果中的 `groupId` 值
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: groupCode
+          in: query
+          description: >-
+            网络系统分组编码：all_group=全部分组，renew_expired=续费后到期，un_group=未分组
+          required: false
+          schema:
+            type: string
+        - name: groupType
+          in: query
+          description: >-
+            网络分组类型：system_group=系统分组，custom_group=自定义分组
+          required: false
+          schema:
+            type: string
+        - name: nums
+          in: query
+          description: 代理序号，多个序号使用英文逗号分隔
+          required: false
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: >-
+            每页显示的记录数，默认值为 1，单次查询最大数量为 1
+          required: false
+          schema:
+            type: integer
+        - name: pageNum
+          in: query
+          description: 当前页数量
+          required: false
+          schema:
+            type: integer
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfoNetworkListResVO'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    total: 0
+                    rows:
+                      - id: 0
+                        name: ''
+                        num: 0
+                        groupId: 0
+                        groupName: ''
+                        host: ''
+                        port: 0
+                        account: ''
+                        password: ''
+                        type: ''
+                        status: 0
+                        detectDataType: 0
+                        bindCount: 0
+                        boxBindCount: 0
+                        countryCode: ''
+                        timezone: ''
+                        language: ''
+                        countryName: ''
+                        region: ''
+                        latitude: ''
+                        longitude: ''
+                        ip: ''
+                        remark: ''
+                        createTime: ''
+                        updateTime: ''
+                    code: 0
+                    msg: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    total: 0
+                    rows:
+                      - id: 0
+                        name: ''
+                        num: 0
+                        groupId: 0
+                        groupName: ''
+                        host: ''
+                        port: 0
+                        account: ''
+                        password: ''
+                        type: ''
+                        status: 0
+                        detectDataType: 0
+                        bindCount: 0
+                        boxBindCount: 0
+                        countryCode: ''
+                        timezone: ''
+                        language: ''
+                        countryName: ''
+                        region: ''
+                        latitude: ''
+                        longitude: ''
+                        ip: ''
+                        remark: ''
+                        createTime: ''
+                        updateTime: ''
+                    code: 0
+                    msg: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    total: 0
+                    rows:
+                      - id: 0
+                        name: ''
+                        num: 0
+                        groupId: 0
+                        groupName: ''
+                        host: ''
+                        port: 0
+                        account: ''
+                        password: ''
+                        type: ''
+                        status: 0
+                        detectDataType: 0
+                        bindCount: 0
+                        boxBindCount: 0
+                        countryCode: ''
+                        timezone: ''
+                        language: ''
+                        countryName: ''
+                        region: ''
+                        latitude: ''
+                        longitude: ''
+                        ip: ''
+                        remark: ''
+                        createTime: ''
+                        updateTime: ''
+                    code: 0
+                    msg: ''
+                '4':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    total: 0
+                    rows:
+                      - id: 0
+                        name: ''
+                        num: 0
+                        groupId: 0
+                        groupName: ''
+                        host: ''
+                        port: 0
+                        account: ''
+                        password: ''
+                        type: ''
+                        status: 0
+                        detectDataType: 0
+                        bindCount: 0
+                        boxBindCount: 0
+                        countryCode: ''
+                        timezone: ''
+                        language: ''
+                        countryName: ''
+                        region: ''
+                        latitude: ''
+                        longitude: ''
+                        ip: ''
+                        remark: ''
+                        createTime: ''
+                        updateTime: ''
+                    code: 0
+                    msg: ''
+      security: []
+  /open/api/getPhoneModelList:
+    post:
+      summary: 获取机型列表
+      deprecated: false
+      description: ''
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiPhoneModelListReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RMapListApiPhoneModelInfoResVO'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      '':
+                        - model: ''
+                          modelId: 0
+                          deviceName: ''
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      '':
+                        - model: ''
+                          modelId: 0
+                          deviceName: ''
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      '':
+                        - model: ''
+                          modelId: 0
+                          deviceName: ''
+                    status: ''
+                '4':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      '':
+                        - model: ''
+                          modelId: 0
+                          deviceName: ''
+                    status: ''
+      security: []
+  /open/api/rpa/template/getMarkList:
+    get:
+      summary: RPA 获取标记模板列表
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: pageSize
+          in: query
+          description: >-
+            每页显示的记录数，默认值为 1，单次查询最大数量为 1
+          required: false
+          schema:
+            type: integer
+        - name: pageNum
+          in: query
+          description: 当前页数量
+          required: false
+          schema:
+            type: integer
+        - name: tag
+          in: query
+          description: 模板tag
+          required: false
+          schema:
+            type: string
+        - name: nameOrCode
+          in: query
+          description: 流程模板名称/code
+          required: false
+          schema:
+            type: string
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfoGetMarkTemplatePageResVO'
+      security: []
+  /open/api/rpa/template/getList:
+    get:
+      summary: RPA 获取团队模板列表
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: pageSize
+          in: query
+          description: >-
+            每页显示的记录数，默认值为 1，单次查询最大数量为 1
+          required: false
+          schema:
+            type: integer
+        - name: pageNum
+          in: query
+          description: 当前页数量
+          required: false
+          schema:
+            type: integer
+        - name: nameOrCode
+          in: query
+          description: 流程模板名称/code
+          required: false
+          schema:
+            type: string
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfoGetTemplatePageResVO'
+      security: []
+  /open/api/rpa/template/collect:
+    post:
+      summary: 添加模板到我的团队
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectTemplateReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/template/delete:
+    post:
+      summary: 从我的团队删除模板
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteTemplateReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/task/getList:
+    get:
+      summary: RPA 获取任务列表
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: pageSize
+          in: query
+          description: >-
+            每页显示的记录数，默认值为 1，单次查询最大数量为 1
+          required: false
+          schema:
+            type: integer
+        - name: pageNum
+          in: query
+          description: 当前页数量
+          required: false
+          schema:
+            type: integer
+        - name: name
+          in: query
+          description: 任务名称
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: 任务状态
+          required: false
+          schema:
+            type: integer
+        - name: startTime
+          in: query
+          description: 任务开始执行范围开始时间
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: endTime
+          in: query
+          description: 任务开始执行范围结束时间
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: templateName
+          in: query
+          description: 关联流程(模板)名称
+          required: false
+          schema:
+            type: string
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfoGetTaskPageListResVO'
+      security: []
+  /open/api/rpa/task/getInfo/{id}:
+    get:
+      summary: RPA 获取任务详情
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RGetTaskInfoResVO'
+      security: []
+  /open/api/rpa/task/getDetailList:
+    get:
+      summary: RPA 获取任务详情列表
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: pageSize
+          in: query
+          description: >-
+            每页显示的记录数，默认值为 1，单次查询最大数量为 1
+          required: false
+          schema:
+            type: integer
+        - name: pageNum
+          in: query
+          description: 当前页数量
+          required: false
+          schema:
+            type: integer
+        - name: taskId
+          in: query
+          description: 任务ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableDataInfoGetTaskDetailInfoResVO'
+      security: []
+  /open/api/rpa/task/retryTask:
+    post:
+      summary: RPA 重试任务
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/task/retryDetailTask:
+    post:
+      summary: RPA 重试任务详情
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryDetailTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/task/update:
+    post:
+      summary: RPA 更新任务
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/task/updateDetail:
+    post:
+      summary: RPA 更新任务详情
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDetailTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/task/stop:
+    post:
+      summary: RPA 停止任务
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/task/stopDetail:
+    post:
+      summary: RPA 停止任务详情
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopDetailTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/task/delete:
+    post:
+      summary: RPA 删除任务
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/rpa/task/deleteDetail:
+    post:
+      summary: RPA 删除任务详情
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteDetailTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RVoid'
+      security: []
+  /open/api/phone/action/click:
+    post:
+      summary: 手机操作 - 单击
+      deprecated: false
+      description: 手机操作-单击
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClickActionReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RLong'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+      security: []
+  /open/api/phone/action/doubleClick:
+    post:
+      summary: 手机操作 - 双击
+      deprecated: false
+      description: 手机操作-双击
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DoubleClickActionReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RLong'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+      security: []
+  /open/api/phone/action/swipe:
+    post:
+      summary: 手机操作 - 滑动
+      deprecated: false
+      description: 手机操作-滑动
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwipeActionReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RLong'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+      security: []
+  /open/api/phone/action/drag:
+    post:
+      summary: 手机操作 - 拖动
+      deprecated: false
+      description: 手机操作-拖动
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DragActionReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RLong'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+      security: []
+  /open/api/phone/action/input:
+    post:
+      summary: 手机操作 - 输入
+      deprecated: false
+      description: 手机操作-输入
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InputActionReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RLong'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+      security: []
+  /open/api/phone/action/longClick:
+    post:
+      summary: 手机操作 - 长按
+      deprecated: false
+      description: 手机操作-长按
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LongClickActionReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RLong'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+      security: []
+  /open/api/phone/action/app:
+    post:
+      summary: 手机操作 - 操作应用
+      deprecated: false
+      description: 手机操作-操作应用
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppActionReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RLong'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data: 0
+                    status: ''
+      security: []
+  /open/api/phone/action/task/status:
+    post:
+      summary: 手机操作 - 查询任务状态
+      deprecated: false
+      description: 手机操作-查询任务状态
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionTaskStatusReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RActionTaskStatusResVO'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      taskId: 0
+                      taskStatus: 0
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      taskId: 0
+                      taskStatus: 0
+                    status: ''
+                '3':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      taskId: 0
+                      taskStatus: 0
+                    status: ''
+      security: []
+  /open/api/phone/screenCap:
+    post:
+      summary: 手机截图
+      deprecated: false
+      description: 手机截图
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneScreenCapReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RPhoneScreenCapResVO'
+              examples:
+                '1':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      url: ''
+                    status: ''
+                '2':
+                  summary: 成功示例
+                  value:
+                    traceId: ''
+                    code: 0
+                    msg: ''
+                    data:
+                      url: ''
+                    status: ''
+      security: []
+  /open/api/getCpyConnect:
+    post:
+      summary: 获取 CPY 连接详情。
+      deprecated: false
+      description: 获取 CPY 连接详情。
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenApiGetCpyConnectReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROpenApiPhoneCpyConnectResVO'
+              example:
+                traceId: ''
+                code: 0
+                msg: ''
+                data:
+                  token: ''
+                  host: ''
+                status: ''
+      security: []
+  /open/api/getRemoteComponentToken:
+    post:
+      summary: 获取远程推流组件Url
+      deprecated: false
+      description: 获取远程推流组件Url
+      tags: [手机操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetRemoteComponentTokenReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RGetRemoteComponentTokenResVO'
+      security: []
+  /open/api/rpa/task/add:
+    post:
+      summary: RPA 新增任务
+      deprecated: false
+      description: RPA 自动化
+      tags: [RPA操作]
+      parameters:
+        - name: chameleon
+          in: header
+          description: ''
+          example: '{{chameleon}}'
+          schema:
+            type: string
+            default: '{{chameleon}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTaskReqVO'
+              description: ''
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAddTaskResVO'
+      security: []
+components:
+  schemas:
+    PhoneCreateReqVOCreate:
+      type: object
+      properties:
+        spuId:
+          type: integer
+          description: 商品 SPU ID
+          format: int64
+        skuId:
+          type: integer
+          description: 商品 SKU ID
+          format: int64
+        num:
+          type: integer
+          description: 购买数量
+          minimum: 1
+        realResolution:
+          type: boolean
+          description: 是否真机分辨率
+        brand:
+          type: string
+          description: 品牌名称
+        width:
+          type: integer
+          description: 分辨率宽度
+        height:
+          type: integer
+          description: 分辨率高度
+        phoneNumber:
+          type: string
+          description: 手机号
+        configId:
+          type: integer
+          description: >-
+            手机机型 ID，根据“获取机型列表”接口返回的 ID 创建对应机型的手机
+          format: int64
+        autoInstallFlag:
+          type: integer
+          description: '自动安装标志：0=关闭，1=开启'
+          default: 0
+        groupId:
+          type: integer
+          description: 分组ID，不传则为未分组
+          format: int64
+        remark:
+          type: string
+          description: 备注，最多200字符
+        tagIds:
+          type: array
+          items:
+            type: integer
+          description: 标签ID列表，最多5个
+      required:
+        - spuId
+        - skuId
+        - num
+    PhoneInfoResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 手机ID
+          format: int64
+        name:
+          type: string
+          description: 手机名称
+        code:
+          type: string
+          description: 手机编码，业务侧自定义
+    RListPhoneInfoResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneInfoResVO'
+            description: 手机信息响应对象
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    TableDataInfoPhonePageListResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        total:
+          type: integer
+          description: 总记录数
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhonePageListResVO'
+            description: 手机列表响应对象
+          description: 列表数据
+        code:
+          type: integer
+          description: 消息状态码
+        msg:
+          type: string
+          description: 消息内容
+    PhonePageListResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 手机ID
+          format: int64
+        name:
+          type: string
+          description: 手机名称
+        groupId:
+          type: integer
+          description: 手机分组ID
+          format: int64
+        groupName:
+          type: string
+          description: 手机分组名称
+        code:
+          type: string
+          description: 手机编码，业务侧自定义
+        spuId:
+          type: integer
+          description: 商品 SPU ID
+          format: int64
+        spuName:
+          type: string
+          description: spu名称
+        skuId:
+          type: integer
+          description: 商品 SKU ID
+          format: int64
+        phoneModel:
+          type: string
+          description: 手机型号
+        phoneBrand:
+          type: string
+          description: 手机品牌
+        adbIp:
+          type: string
+          description: adbip信息
+        adbPort:
+          type: string
+          description: adb端口
+        adbPassword:
+          type: string
+          description: adb密码
+        payType:
+          type: integer
+          description: 扣费类型：1=包年包月，2=每N分钟
+        skuName:
+          type: string
+          description: sku名称
+        cycleName:
+          type: string
+          description: 计费周期名字
+        cycleEnum:
+          type: string
+          description: 计费周期枚举值
+        expireStatus:
+          type: integer
+          description: 计费(过期)状态：0=已经过期，1=正常
+        networkId:
+          type: integer
+          description: 绑定网络ID
+          format: int64
+        channel:
+          type: string
+          description: 渠道
+        powerOnTime:
+          type: string
+          description: 最近开机时间
+        powerOffTime:
+          type: string
+          description: 最近关机时间
+        expireTime:
+          type: string
+          description: 过期时间
+        expireDuration:
+          type: string
+          description: 过期时长
+        nextPayTime:
+          type: string
+          description: 下次需要支付的时间
+        status:
+          type: integer
+          description: 状态
+          enum:
+            - 1
+            - 2
+            - 4
+            - 41
+            - 6
+            - 7
+        remark:
+          type: string
+          description: 备注说明
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagSimpleResVO'
+            description: 标签简要响应对象
+          description: 标签列表
+        userId:
+          type: integer
+          description: 授权用户id
+          format: int64
+        createUser:
+          type: string
+          description: 创建人
+        createTime:
+          type: string
+          description: 创建时间
+        updateTime:
+          type: string
+          description: 最近修改时间
+        networkResVO:
+          $ref: '#/components/schemas/PhoneSimpleNetWorkResVO'
+          description: 手机网络信息
+        envSettingResVO:
+          $ref: '#/components/schemas/PhoneEnvSettingResVO'
+          description: 手机环境设置信息
+        authorizeResVO:
+          $ref: '#/components/schemas/PhoneAuthorizeResVO'
+          description: 授权用户信息
+        authList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneAuthorizeResVO'
+            description: 手机授权响应对象
+          description: 授权用户信息列表
+        cycle:
+          type: integer
+          description: 计费周期
+        screenWidth:
+          type: string
+          description: 手机屏幕水平分辨率
+        screenHeight:
+          type: string
+          description: 手机屏幕垂直分辨率
+    PhoneResolutionListResVO:
+      type: object
+      properties:
+        screenWidth:
+          type: string
+          description: 屏幕宽度
+        screenHeight:
+          type: string
+          description: 屏幕高度
+    PhoneSimpleNetWorkResVO:
+      type: object
+      properties:
+        host:
+          type: string
+          description: ''
+        port:
+          type: integer
+          description: 代理端口
+        account:
+          type: string
+          description: 账号
+        password:
+          type: string
+          description: 密码
+        region:
+          type: string
+          description: 地区
+        num:
+          type: integer
+          description: 序号
+        countryCode:
+          type: string
+          description: 国家代码
+        countryName:
+          type: string
+          description: 国家
+        type:
+          type: string
+          description: '代理类型：1=socks5，2=https，3=http'
+        timezone:
+          type: string
+          description: 时区
+        language:
+          type: string
+          description: 语言
+        ip:
+          type: string
+          description: 实际ip地址
+        latitude:
+          type: string
+          description: 纬度
+        longitude:
+          type: string
+          description: 经度
+        bindCount:
+          type: integer
+          description: 关联手机数
+          format: int64
+        status:
+          type: integer
+          description: 状态 0=未检测 1=检测通过 2=检测失败
+        detectDataType:
+          type: integer
+          description: 检测数据类型，1-跟随ip 2-自定义
+        groupId:
+          type: integer
+          description: 网络分组ID
+          format: int64
+        remark:
+          type: string
+          description: 备注
+        expireTime:
+          type: string
+          description: 代理到期时间
+    PhoneAuthorizeResVO:
+      type: object
+      properties:
+        avatar:
+          type: string
+          description: 头像
+        name:
+          type: string
+          description: 昵称
+        userId:
+          type: integer
+          description: 用户ID
+          format: int64
+        email:
+          type: string
+          description: 邮箱
+    OpenApiPhoneAuthorizeReqVO:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+          description: 手机 ID 列表
+          maxItems: 50
+        userIds:
+          type: array
+          items:
+            type: integer
+          description: 授权用户 ID 列表
+          maxItems: 50
+      required:
+        - ids
+        - userIds
+    AuthPhoneVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: 手机 ID
+          format: int64
+        code:
+          type: string
+          description: 手机编号
+        name:
+          type: string
+          description: 手机名称
+    OpenApiTeamMemberResVO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: 用户 ID
+          format: int64
+        email:
+          type: string
+          description: 邮箱
+        nickName:
+          type: string
+          description: 昵称
+        isBoss:
+          type: boolean
+          description: 是否为团队 BOSS
+        roleId:
+          type: integer
+          description: 角色 ID
+          format: int64
+        roleName:
+          type: string
+          description: 角色名称
+        authPhones:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthPhoneVO'
+            description: 已授权手机
+          description: 已授权手机列表
+    RListOpenApiTeamMemberResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenApiTeamMemberResVO'
+            description: 团队成员
+          description: 团队成员列表
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    PhoneEnvSettingResVO:
+      type: object
+      properties:
+        latitude:
+          type: string
+          description: 纬度
+        longitude:
+          type: string
+          description: 经度
+        location:
+          type: string
+          description: 归属地
+        timezone:
+          type: string
+          description: 时区
+        language:
+          type: string
+          description: 语言
+        latLngFollowIp:
+          type: boolean
+          description: 经纬度是否跟随IP
+        locationFollowIp:
+          type: boolean
+          description: 归属地是否跟随IP
+        timezoneFollowIp:
+          type: boolean
+          description: 时区是否跟随IP
+        languageFollowIp:
+          type: boolean
+          description: 语言是否跟随IP
+        nextPowerOnEffective:
+          type: boolean
+          description: 是否下次开机生效
+    PhoneSetNetworkReqVOUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 手机ID
+          format: int64
+        networkId:
+          type: integer
+          description: 网络ID
+          format: int64
+        host:
+          type: string
+          description: 代理主机
+        port:
+          type: integer
+          description: 代理端口
+        account:
+          type: string
+          description: 代理账号
+        password:
+          type: string
+          description: 代理密码
+        type:
+          type: string
+          description: ''
+        way:
+          type: string
+          description: 使用方式 1.静态ip 2.动态ip
+        region:
+          type: string
+          description: 地区
+        status:
+          type: integer
+          description: >-
+            代理检测状态；如果设置了 networkId，则以该 networkId 对应的数据为准。
+        name:
+          type: string
+          description: 网络名称
+        ip:
+          type: string
+          description: 实际ip地址
+        countryName:
+          type: string
+          description: 国家
+        countryCode:
+          type: string
+          description: 国家代码
+        latitude:
+          type: string
+          description: 纬度
+        longitude:
+          type: string
+          description: 经度
+        language:
+          type: string
+          description: 语言
+        timezone:
+          type: string
+          description: 时区
+        udp:
+          type: integer
+          description: 是否开启UDP
+        tcp:
+          type: integer
+          description: 是否开启TCP
+        remark:
+          type: string
+          description: 备注
+        groupId:
+          type: integer
+          description: 网络分组ID
+          format: int64
+          default: -1
+        detectDataType:
+          type: integer
+          description: '检测数据类型：1=跟随 IP，2=自定义'
+        expireTime:
+          type: integer
+          description: 代理过期时间（毫秒时间戳）
+          format: int64
+        nextPowerOnEffective:
+          type: integer
+          description: |-
+            生效时机：0=立即应用，1=下次重启时应用
+      required:
+        - id
+    PhoneReqVODelete: &ref_0
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ''
+          format: int64
+        configId:
+          type: integer
+          description: >-
+            手机机型 ID，根据“获取机型列表”接口返回的 ID 创建对应机型的手机
+          format: int64
+      required:
+        - id
+    PhoneReqVOUpdate: *ref_0
+    PhoneBatchOpReqVO:
+      type: object
+      properties:
+        phoneIds:
+          type: array
+          items:
+            type: integer
+          description: 手机 ID 列表
+      required:
+        - phoneIds
+    PhoneStartResVO:
+      type: object
+      properties:
+        screenWidth:
+          type: string
+          description: 分辨率宽
+        screenHeight:
+          type: string
+          description: 分辨率高
+        taskId:
+          type: integer
+          description: 任务id
+          format: int64
+        failed:
+          type: boolean
+          description: |-
+            开机是否失败（true=失败，false=成功）
+            手机启动失败
+          default: false
+        failReason:
+          type: string
+          description: |-
+            失败原因（仅在failed=true时有值）
+            启动失败的原因
+    RPhoneStartResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/PhoneStartResVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    PhoneTaskStatusResVO:
+      type: object
+      properties:
+        taskStatus:
+          type: integer
+          description: 手机操作任务状态
+        taskStatusName:
+          type: string
+          description: 手机操作任务状态
+        phoneStatus:
+          type: integer
+          description: 手机当前状态
+        phoneStatusName:
+          type: string
+          description: 手机当前状态
+    RPhoneTaskStatusResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/PhoneTaskStatusResVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    Resolution:
+      type: object
+      properties:
+        width:
+          type: integer
+          description: 分辨率宽度
+        height:
+          type: integer
+          description: 分辨率高度
+    PhoneBrandListResVO:
+      type: object
+      properties:
+        brand:
+          type: string
+          description: SDK版本
+        resolutions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resolution'
+            description: >-
+              手机品牌分辨率对象
+          description: 可用分辨率列表
+    RListPhoneBrandListResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneBrandListResVO'
+            description: 品牌列表响应对象
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    PhoneBrandListReqVO:
+      type: object
+      properties:
+        sdkVersion:
+          type: integer
+          description: android版本
+      required:
+        - sdkVersion
+    key:
+      type: object
+      properties:
+        model:
+          type: string
+          description: 型号名称
+        modelId:
+          type: integer
+          description: 型号 Id
+          format: int64
+        deviceName:
+          type: string
+          description: 设备名称
+    MapListApiPhoneModelInfoResVO:
+      type: object
+      properties:
+        key:
+          type: array
+          items:
+            $ref: '#/components/schemas/key'
+    RMapListApiPhoneModelInfoResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          $ref: '#/components/schemas/MapListApiPhoneModelInfoResVO'
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    ApiPhoneModelListReqVO:
+      type: object
+      properties:
+        brand:
+          type: string
+          description: 品牌名称
+        sdkVersion:
+          type: integer
+          description: Android 版本
+    TagSimpleResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 标签ID
+          format: int64
+        tagName:
+          type: string
+          description: 标签名称
+        color:
+          type: string
+          description: 颜色
+    TableDataInfoNetworkListResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        total:
+          type: integer
+          description: 总记录数
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkListResVO'
+            description: 网络列表响应对象
+          description: 列表数据
+        code:
+          type: integer
+          description: 消息状态码
+        msg:
+          type: string
+          description: 消息内容
+    NetworkListResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 网络ID
+          format: int64
+        name:
+          type: string
+          description: 网络名称
+        num:
+          type: integer
+          description: 序号
+        groupId:
+          type: integer
+          description: 网络分组ID
+          format: int64
+        groupName:
+          type: string
+          description: 网络分组名称
+        host:
+          type: string
+          description: ip/域名
+        port:
+          type: integer
+          description: 端口
+        account:
+          type: string
+          description: 账号
+        password:
+          type: string
+          description: 密码
+        type:
+          type: string
+          description: 代理类型 1.socks5 2.https 3.http
+        status:
+          type: integer
+          description: 状态 0=未检测 1=检测通过 2=检测失败
+        detectDataType:
+          type: integer
+          description: 检测数据类型，1-跟随ip 2-自定义
+        bindCount:
+          type: integer
+          description: 关联手机数
+          format: int64
+        boxBindCount:
+          type: integer
+          description: 魔盒手机绑定次数
+          format: int64
+        countryCode:
+          type: string
+          description: 国家代码
+        timezone:
+          type: string
+          description: 时区
+        language:
+          type: string
+          description: 语言
+        countryName:
+          type: string
+          description: 国家
+        region:
+          type: string
+          description: 地区
+        latitude:
+          type: string
+          description: 纬度
+        longitude:
+          type: string
+          description: 经度
+        ip:
+          type: string
+          description: 实际ip地址
+        remark:
+          type: string
+          description: 备注说明
+        createTime:
+          type: string
+          description: 创建时间
+        updateTime:
+          type: string
+          description: 最近修改时间
+        expireTime:
+          type: string
+          description: 代理到期时间
+        syncNetworkParams:
+          type: integer
+          description: 更新网络时是否同步网络参数到已绑定手机 0-否 1-是
+        syncLanguage:
+          type: integer
+          description: 更新网络时是否同步语言到已绑定手机 0-否 1-是
+    RLong:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          type: integer
+          description: 数据
+          format: int64
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    CollectTemplateReqVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 流程模板id
+          format: int64
+    DeleteTemplateReqVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 流程模板id
+          format: int64
+      required:
+        - id
+    GetMarkTemplatePageResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 流程模板id
+          format: int64
+        wyTemplateId:
+          type: integer
+          description: wy流程模板状态
+          format: int64
+        name:
+          type: string
+          description: 流程模板名称
+        description:
+          type: string
+          description: 流程模板简介
+        sdkVersion:
+          type: string
+          description: sdk版本(spu名称)
+        screen:
+          type: string
+          description: 分辨率大小
+        tag:
+          type: string
+          description: 所属标签
+        iconUrl:
+          type: string
+          description: icon图标链接
+        code:
+          type: string
+          description: 流程模板编号
+        params:
+          $ref: '#/components/schemas/MapString'
+          description: 流程模板参数构建结果
+        newParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateParamsVO'
+            description: 模板参数信息
+          description: 流程模板参数构建结果
+    TableDataInfoGetMarkTemplatePageResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路 ID
+        total:
+          type: integer
+          description: 记录总数
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetMarkTemplatePageResVO'
+            description: 标记模板分页响应对象
+          description: 列表数据
+        code:
+          type: integer
+          description: 消息状态码
+        msg:
+          type: string
+          description: 消息内容
+    FileInfo:
+      type: object
+      properties:
+        status:
+          type: string
+          description: 流程模板id
+        fileUrl:
+          type: string
+          description: 流程模板id
+        name:
+          type: string
+          description: 流程模板id
+        size:
+          type: string
+          description: 流程模板id
+    TemplateParamsVO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 名称
+        type:
+          type: string
+          description: 流程模板id
+        required:
+          type: string
+          description: 流程模板id
+        defaultValue:
+          type: string
+          description: 流程模板id
+        fileInfo:
+          $ref: '#/components/schemas/FileInfo'
+          description: 流程模板id
+        description:
+          type: string
+          description: 说明
+        source:
+          type: string
+          description: 参数来源
+    GetTemplatePageResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 流程模板id
+          format: int64
+        phoneId:
+          type: integer
+          description: 手机id
+          format: int64
+        wyTemplateId:
+          type: integer
+          description: wy流程模板状态
+          format: int64
+        code:
+          type: string
+          description: 流程模板编号
+        originCode:
+          type: string
+          description: 原流程模板code
+        name:
+          type: string
+          description: 流程模板名称
+        description:
+          type: string
+          description: 流程模板简介
+        sdkVersion:
+          type: string
+          description: sdk版本(spu名称)
+        screen:
+          type: string
+          description: 分辨率大小
+        tag:
+          type: string
+          description: 所属标签
+        iconUrl:
+          type: string
+          description: icon图标链接
+        params:
+          $ref: '#/components/schemas/MapString'
+          description: 流程模板参数
+        newParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateParamsVO'
+            description: 模板参数信息
+          description: 流程模板参数构建结果
+    TableDataInfoGetTemplatePageResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路 ID
+        total:
+          type: integer
+          description: 记录总数
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTemplatePageResVO'
+            description: 模板分页响应对象
+          description: 列表数据
+        code:
+          type: integer
+          description: 消息状态码
+        msg:
+          type: string
+          description: 消息内容
+    MapString:
+      type: object
+      properties:
+        key:
+          type: string
+    TaskDetailInfoVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 任务详情id
+          format: int64
+        code:
+          type: string
+          description: 手机编号
+        phoneName:
+          type: string
+          description: 手机名称
+        startTime:
+          type: string
+          description: 任务开始时间
+        endTime:
+          type: string
+          description: 任务结束时间
+        params:
+          $ref: '#/components/schemas/MapString'
+          description: 参数
+        failIdx:
+          type: integer
+          description: 失败时的节点idx
+        errorImgUrl:
+          type: string
+          description: 任务异常截图url
+        status:
+          type: integer
+          description: 任务状态 0-待执行 1-进行中 2-成功 3-失败
+        nodeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiRpaTaskNodeInfo'
+            description: RPA 任务节点信息（ApiRpaTaskNodeInfo）
+          description: 节点列表
+    ApiRpaTaskNodeInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 主键
+          format: int64
+        taskId:
+          type: integer
+          description: 任务id
+          format: int64
+        idx:
+          type: integer
+          description: 节点idx
+        parentIdx:
+          type: integer
+          description: 循环节点父级idx,0代表非循环节点
+        type:
+          type: integer
+          description: 动作类型
+        name:
+          type: string
+          description: 节点名称
+        start:
+          type: string
+          description: 开始时间
+        cost:
+          type: integer
+          description: 耗时,单位:毫秒
+          format: int64
+        status:
+          type: integer
+          description: 状态
+        nextIdx:
+          type: integer
+          description: 下一个节点idx
+        description:
+          type: string
+          description: 描述信息,或失败原因
+        hasChildren:
+          type: boolean
+          description: 是否拥有子节点
+        childrenList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiRpaTaskNodeInfo'
+            description: RPA 任务节点信息（ApiRpaTaskNodeInfo）
+          description: 子节点列表
+    ProductSkuExtraPriceInfoVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 唯一标识（ID）
+          format: int64
+        name:
+          type: string
+          description: 费用名称
+        price:
+          type: number
+          description: 费用金额
+        cycleName:
+          type: string
+          description: 计费周期单位
+    ProductSkuInfoVO:
+      type: object
+      properties:
+        skuId:
+          type: integer
+          description: 商品skuId
+          format: int64
+        skuName:
+          type: string
+          description: 商品sku名字
+        chargeType:
+          type: integer
+          description: 计费类型：1-按需 2-包时
+        cycle:
+          type: integer
+          description: 计费周期
+        cycleName:
+          type: string
+          description: 计费周期单位
+        isAutoRenewal:
+          type: boolean
+          description: 是否自动续费,目前固定为：true
+          default: true
+        cyclePrice:
+          type: number
+          description: 算力费用
+        chargeLimit:
+          type: number
+          description: 消费限额
+        skuExtraPriceList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSkuExtraPriceInfoVO'
+            description: 商品 SKU 额外价格信息对象
+          description: 商品sku额外费用信息
+    ProductInfoVO:
+      type: object
+      properties:
+        spuId:
+          type: integer
+          description: 商品spuId
+          format: int64
+        spuName:
+          type: string
+          description: 商品spu名称
+        skuList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSkuInfoVO'
+            description: 商品 SKU 信息对象
+          description: 商品sku信息
+    RListProductInfoVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInfoVO'
+            description: 商品信息对象
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    RListPhoneResolutionListResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneResolutionListResVO'
+            description: 手机分辨率列表响应对象
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    CheckNetworkResVO:
+      type: object
+      properties:
+        countryName:
+          type: string
+          description: 国家
+        countryCode:
+          type: string
+          description: 国家代码
+        latitude:
+          type: string
+          description: 纬度
+        longitude:
+          type: string
+          description: 经度
+        language:
+          type: string
+          description: 语言
+        timezone:
+          type: string
+          description: 时区
+        region:
+          type: string
+          description: 地区
+        host:
+          type: string
+          description: 检测出来的实际IP
+    RCheckNetworkResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/CheckNetworkResVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    NetworkDetectReqVO:
+      type: object
+      properties:
+        host:
+          type: string
+          description: 代理主机
+        port:
+          type: integer
+          description: 代理端口
+        account:
+          type: string
+          description: 代理账号
+        password:
+          type: string
+          description: 代理密码
+        type:
+          type: string
+          description: '代理类型: 1-socks5，2-https，3-http'
+        checkType:
+          type: string
+          description: 'IP查询渠道: dbip/ip2location/maxmind/ipapi，不传默认dbip'
+          pattern: '^(dbip|ip2location|maxmind|ipapi)?$'
+      required:
+        - host
+        - port
+        - type
+    PhoneAdbInfoResVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: 手机id
+          format: int64
+        adbIp:
+          type: string
+          description: adb服务器地址
+        adbPort:
+          type: string
+          description: adb服务器端口
+        adbPassword:
+          type: string
+          description: adb密码
+    RPhoneAdbInfoResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/PhoneAdbInfoResVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    PhoneGetAdbInfoVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 手机id
+          format: int64
+      required:
+        - id
+    ApiPhoneFileInfoResVO:
+      type: object
+      properties:
+        path:
+          type: string
+          description: 路径
+        name:
+          type: string
+          description: 名称
+        type:
+          type: integer
+          description: 类型：1=目录，2=文件
+        size:
+          type: integer
+          description: 大小
+          format: int64
+        convertSize:
+          type: string
+          description: 转换后的大小
+    TableDataInfoApiPhoneFileInfoResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        total:
+          type: integer
+          description: 总记录数
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiPhoneFileInfoResVO'
+            description: 手机文件扫描响应对象
+          description: 列表数据
+        code:
+          type: integer
+          description: 消息状态码
+        msg:
+          type: string
+          description: 消息内容
+    ApiPhoneFileScanPageResVO:
+      type: object
+      properties:
+        parentDir:
+          type: string
+          description: 所属父目录
+        fileList:
+          $ref: '#/components/schemas/TableDataInfoApiPhoneFileInfoResVO'
+          description: 文件列表
+    RApiPhoneFileScanPageResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/ApiPhoneFileScanPageResVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    ApiPhoneFileScanReqVO:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          description: >-
+            每页显示的记录数，默认值为 1，单次查询最大数量为 1
+        pageNum:
+          type: integer
+          description: 当前页数量
+        phoneId:
+          type: integer
+          description: 手机Id
+          format: int64
+        parentDir:
+          type: string
+          description: 父目录
+      required:
+        - phoneId
+    ApiPhoneFileDownloadResVO:
+      type: object
+      properties:
+        downId:
+          type: string
+          description: 文件下载ID
+        taskId:
+          type: integer
+          description: 任务id
+          format: int64
+    RApiPhoneFileDownloadResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/ApiPhoneFileDownloadResVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    ApiPhoneFileDownloadReqVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: 手机Id
+          format: int64
+        filePath:
+          type: string
+          description: 文件目录
+        size:
+          type: string
+          description: 文件大小（单位：B）
+      required:
+        - phoneId
+        - filePath
+        - size
+    PartUploadUrl:
+      type: object
+      properties:
+        partNumber:
+          type: integer
+          description: ''
+        uploadUrl:
+          type: string
+          description: ''
+    PartSummary:
+      type: object
+      properties:
+        partNumber:
+          type: integer
+          description: ''
+        lastModified:
+          type: string
+          description: ''
+        eTag:
+          type: string
+          description: ''
+        size:
+          type: integer
+          description: ''
+          format: int64
+    UploadTaskVO:
+      type: object
+      properties:
+        teamId:
+          type: integer
+          description: 团队ID
+          format: int64
+        uploadId:
+          type: string
+          description: 分片上传的uploadId
+        fileIdentifier:
+          type: string
+          description: 文件唯一标识（md5）
+        fileName:
+          type: string
+          description: 文件名
+        bucketName:
+          type: string
+          description: 所属桶名
+        objectKey:
+          type: string
+          description: 文件的key
+        totalSize:
+          type: integer
+          description: 文件大小（byte）
+        chunkSize:
+          type: integer
+          description: 每个分片大小（byte）
+        chunkNum:
+          type: integer
+          description: 分片数量
+        expireTime:
+          type: string
+          description: 过期时间
+        uploadInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartUploadUrl'
+            description: 文件分片上传地址
+          description: 分片上传信息
+        exitPartList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartSummary'
+            description: 文件分片摘要
+          description: 已上传完的分片
+    UploadTaskInfoVO:
+      type: object
+      properties:
+        finished:
+          type: boolean
+          description: 是否完成上传（是否已经合并分片）
+        uploadType:
+          type: string
+          description: 上传存储的类型,minio/obs
+        taskRecord:
+          $ref: '#/components/schemas/UploadTaskVO'
+          description: 上传记录信息
+    RUploadTaskInfoVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/UploadTaskInfoVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    UploadTaskInitReqVO:
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: |-
+            文件唯一标识(MD5)
+            文件唯一标识(md5)
+        totalSize:
+          type: integer
+          description: |-
+            文件大小（byte）
+            文件总大小, 最大支持1GB文件上传
+          minimum: 1
+        chunkSize:
+          type: integer
+          description: |-
+            分片大小（byte）
+            分片大小：最小30MB，最大 300MB
+        fileName:
+          type: string
+          description: 文件名称
+          maxLength: 60
+        uploadType:
+          type: integer
+          description: 上传类型：1=APP上传, 2=临时文件上传
+        phoneId:
+          type: integer
+          description: 手机ID
+          format: int64
+      required:
+        - identifier
+        - totalSize
+        - chunkSize
+        - fileName
+        - uploadType
+        - phoneId
+    ApiUploadFileResVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: 手机ID
+          format: int64
+        envFileId:
+          type: integer
+          description: 文件推送记录ID
+          format: int64
+        taskId:
+          type: integer
+          description: 任务id
+          format: int64
+      required:
+        - phoneId
+        - envFileId
+        - taskId
+    RApiUploadFileResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/ApiUploadFileResVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    UploadMergeReqVo:
+      type: object
+      properties:
+        etag:
+          type: string
+          description: 实体标签（etag）
+        partNumber:
+          type: integer
+          description: 上传片数
+          default: 1
+      required:
+        - etag
+        - partNumber
+    ApiUploadMinIOReqVO:
+      type: object
+      properties:
+        pushDestDir:
+          type: string
+          description: 推送的目标文件夹(非图片默认/sdcard/Download，图片在/sdcard/DCIM)
+        phoneId:
+          type: integer
+          description: 手机ID
+          format: int64
+        uploadId:
+          type: string
+          description: 文件唯一标识(md5)
+        fileName:
+          type: string
+          description: 文件名称
+        fileSize:
+          type: integer
+          description: 文件总大小
+          format: int64
+        liveImageUrl:
+          type: string
+          description: 直播文件图片地址
+        uploadType:
+          type: integer
+          description: 文件上传类型,1-普通文件，2-直播文件
+        mergeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadMergeReqVo'
+            description: OBS 文件分片请求对象
+          description: 分片列表
+      required:
+        - phoneId
+    ApiRemoteTokenResVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: |-
+            @ NotNull
+            手机Id
+          format: int64
+        teamId:
+          type: integer
+          description: 团队Id
+          format: int64
+        status:
+          type: integer
+          description: |-
+            @ NotNull
+            {@link PhoneStatusEnum#getCode()}
+            手机状态状态
+          enum:
+            - 1
+            - 2
+            - 4
+            - 41
+            - 6
+            - 7
+        token:
+          type: object
+          properties: {}
+          description: 访问令牌（token）
+        errorMsg:
+          type: string
+          description: 错误信息
+        chargeType:
+          type: integer
+          description: 计费类型
+        autoInstallStatus:
+          type: integer
+          description: 自动安装状态
+        nextPayTime:
+          type: string
+          description: 下次支付时间
+      required:
+        - phoneId
+    RListApiRemoteTokenResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiRemoteTokenResVO'
+            description: 远程令牌响应对象
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    ApiRemoteTokenReqVO:
+      type: object
+      properties:
+        phoneIds:
+          type: array
+          items:
+            type: integer
+          description: 手机id序列序列
+          minItems: 1
+        forceKick:
+          type: boolean
+          description: 是否强制踢掉
+          default: true
+    PhoneAppListReqVO:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          description: >-
+            每页显示的记录数，默认值为 1，单次查询最大数量为 1
+        pageNum:
+          type: integer
+          description: 当前页数量
+        id:
+          type: integer
+          description: ''
+          format: int64
+        apkName:
+          type: string
+          description: 应用名称
+          pattern: ^[^%]*$
+        onlyShowInstalled:
+          type: boolean
+          description: 只显示已经安装的应用, 默认值：false
+          default: false
+        cateCode:
+          type: integer
+          description: 应用分类编码
+          format: int64
+          default: -1
+        shelfStatus:
+          type: integer
+          description: 上架状态：1=已上架，0=已下架
+    AppCategoryVO:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: ''
+        name:
+          type: string
+          description: ''
+    RListAppCategoryVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppCategoryVO'
+            description: 应用分类对象
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    ApiTaskResVO:
+      type: object
+      properties:
+        taskId:
+          type: integer
+          description: 任务id
+          format: int64
+    RApiTaskResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          $ref: '#/components/schemas/ApiTaskResVO'
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    PhoneAppInstallReqVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ''
+          format: int64
+        configId:
+          type: integer
+          description: >-
+            手机机型 ID，根据“获取机型列表”接口返回的 ID 创建对应机型的手机
+          format: int64
+        withG:
+          type: boolean
+          description: 是否赋予应用全部权限,默认不赋予
+          default: false
+        fileId:
+          type: integer
+          description: 应用版本ID(文件ID)
+          format: int64
+        apkPkg:
+          type: string
+          description: 应用包名
+        upgrade:
+          type: boolean
+          description: 是否更新应用
+          default: false
+        apkVersionName:
+          type: string
+          description: apk版本名称
+        apkVersionCode:
+          type: integer
+          description: apk版本号
+        apkName:
+          type: string
+          description: 应用名
+      required:
+        - id
+        - fileId
+        - apkPkg
+        - apkVersionName
+        - apkVersionCode
+        - apkName
+    AppVersionListV2ResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 应用版本ID
+          format: int64
+        apkVersionName:
+          type: string
+          description: apk版本名称
+        apkVersionCode:
+          type: integer
+          description: apk版本号
+        installStatus:
+          type: integer
+          description: 安装状态：-1=未安装，0=安装中，1=安装成功，2=安装失败
+          default: -1
+        size:
+          type: integer
+          description: 文件大小（单位：B）
+        shelfStatus:
+          type: integer
+          description: 上架状态：1=已上架，0=下架
+          default: 0
+        md5:
+          type: string
+          description: MD5 校验值
+        autoInstallFlag:
+          type: integer
+          description: 0=关闭，1=开启，2=禁止
+    AppListV2ResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 安装包 ID（APK ID）
+          format: int64
+        apkName:
+          type: string
+          description: apk名称
+        apkPkg:
+          type: string
+          description: apk包名
+        apkIconUrl:
+          type: string
+          description: apk图标url
+        installStatus:
+          type: integer
+          description: 安装状态：-1=未安装，0=安装中，1=安装成功，2=安装失败
+          default: -1
+        cateCode:
+          type: integer
+          description: 所属分类编码：-1代表未分类
+          default: -1
+        weight:
+          type: integer
+          description: 权重，越大越靠前，默认：0
+          default: 0
+        needUpdate:
+          type: boolean
+          description: 是否需要更新
+          default: false
+        appVersionList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppVersionListV2ResVO'
+            description: 应用版本列表响应对象
+          description: 应用版本列表
+        shelfStatus:
+          type: integer
+          description: 上架状态：1=已上架，0=已下架
+        autoInstall:
+          type: boolean
+          description: 自动安装标志
+    TableDataInfoAppListV2ResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        total:
+          type: integer
+          description: 总记录数
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppListV2ResVO'
+            description: 应用列表响应对象
+          description: 列表数据
+        code:
+          type: integer
+          description: 消息状态码
+        msg:
+          type: string
+          description: 消息内容
+    PhoneReqVO: *ref_0
+    PhoneAppOperateReqVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ''
+          format: int64
+        configId:
+          type: integer
+          description: >-
+            手机机型 ID，根据“获取机型列表”接口返回的 ID 创建对应机型的手机
+          format: int64
+        pkg:
+          type: string
+          description: 应用包名
+        appOp:
+          type: string
+          description: |-
+            操作(uninstall:卸载 start:启动 restart:重启 stop:停止 clear:清理)
+            uninstall:卸载 start:启动 restart:重启 stop:停止 clear:清理
+      required:
+        - id
+        - pkg
+        - appOp
+    TaskInfoResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 任务id
+          format: int64
+        phoneId:
+          type: integer
+          description: 所属手机id
+          format: int64
+        teamId:
+          type: integer
+          description: 所属企业id
+          format: int64
+        userId:
+          type: integer
+          description: 所属企业老板用户id
+          format: int64
+        opType:
+          type: string
+          description: 任务类型
+          enum:
+            - installAppByUrl
+            - operatorApp
+            - phoneRestart
+            - phoneReset
+            - bindPhone
+            - installApp
+            - uploadFile
+            - powerOn
+            - phoneRenew
+            - powerOff
+            - release
+            - downFile
+            - removePhone
+            - rpaTask
+        apkPkg:
+          type: string
+          description: 应用包名
+        apkVersionCode:
+          type: integer
+          description: 应用版本号
+        downloadUrl:
+          type: string
+          description: 下载链接
+        status:
+          type: integer
+          description: 任务状态
+          enum:
+            - 0
+            - 1
+            - 2
+        startTime:
+          type: string
+          description: 任务开始时间
+        endTime:
+          type: string
+          description: 任务结束时间
+        remark:
+          type: string
+          description: 备注信息
+    RListTaskInfoResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskInfoResVO'
+            description: 任务信息响应对象
+          description: 数据
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    TaskStatusListReqVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: 手机id
+          format: int64
+        taskIds:
+          type: array
+          items:
+            type: integer
+          description: 任务id
+          maxItems: 100
+      required:
+        - phoneId
+        - taskIds
+    GetTaskPageListResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 任务id
+          format: int64
+        templateId:
+          type: integer
+          description: 流程模板id
+          format: int64
+        stopPhoneFlag:
+          type: integer
+          description: 任务结束是否关机 1-是 0-否
+        templateName:
+          type: string
+          description: 流程模板名称
+        name:
+          type: string
+          description: 任务名称
+        phoneNum:
+          type: integer
+          description: 执行任务手机数
+        status:
+          type: integer
+          description: 任务状态 0-待执行 1-进行中 2-成功 3-部分失败 4-失败
+        startTime:
+          type: string
+          description: 任务开始时间
+        endTime:
+          type: string
+          description: 任务结束时间
+        createTime:
+          type: string
+          description: 任务创建时间
+        detailTaskCount:
+          type: integer
+          description: 任务数量
+        sucDetailTaskCount:
+          type: integer
+          description: 成功任务数量
+        retryCount:
+          type: integer
+          description: 任务重试次数
+        remark:
+          type: string
+          description: 备注
+    TableDataInfoGetTaskPageListResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路 ID
+        total:
+          type: integer
+          description: 记录总数
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTaskPageListResVO'
+            description: 任务分页列表响应对象
+          description: 列表数据
+        code:
+          type: integer
+          description: 消息状态码
+        msg:
+          type: string
+          description: 消息内容
+    GetTaskInfoResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 任务id
+          format: int64
+        templateName:
+          type: string
+          description: 流程模板名称
+        name:
+          type: string
+          description: 任务名称
+        phoneNum:
+          type: integer
+          description: 执行任务手机数
+        status:
+          type: integer
+          description: 任务状态 0-待执行 1-进行中 2-成功 3-部分失败 4-失败
+        startTime:
+          type: string
+          description: 任务开始时间
+        endTime:
+          type: string
+          description: 任务结束时间
+        taskList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskDetailInfoVO'
+            description: 任务详情信息对象
+          description: 任务详情列表
+        createTime:
+          type: string
+          description: 任务创建时间
+    RGetTaskInfoResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          $ref: '#/components/schemas/GetTaskInfoResVO'
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    GetTaskDetailInfoResVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 任务id
+          format: int64
+        taskId:
+          type: integer
+          description: 任务id
+          format: int64
+        code:
+          type: string
+          description: 手机编号
+        phoneName:
+          type: string
+          description: 手机名称
+        status:
+          type: integer
+          description: 任务状态 0-待执行 1-进行中 2-成功 3-失败
+        startTime:
+          type: string
+          description: 任务开始时间
+        endTime:
+          type: string
+          description: 任务结束时间
+        errorImgUrl:
+          type: string
+          description: 任务异常截图url
+        remark:
+          type: string
+          description: 备注
+    TableDataInfoGetTaskDetailInfoResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路 ID
+        total:
+          type: integer
+          description: 记录总数
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTaskDetailInfoResVO'
+            description: 任务详情响应对象
+          description: 列表数据
+        code:
+          type: integer
+          description: 消息状态码
+        msg:
+          type: string
+          description: 消息内容
+    SubTaskInfoVO:
+      type: object
+      properties:
+        detailTaskId:
+          type: integer
+          description: 子任务id
+          format: int64
+        phoneId:
+          type: integer
+          description: 手机id
+          format: int64
+    AddTaskResVO:
+      type: object
+      properties:
+        taskId:
+          type: integer
+          description: 主任务id
+          format: int64
+        subTaskList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubTaskInfoVO'
+            description: 子任务信息对象
+          description: 子任务列表
+    RAddTaskResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          $ref: '#/components/schemas/AddTaskResVO'
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    AddTaskReqVO:
+      type: object
+      properties:
+        templateId:
+          type: integer
+          description: 流程模板id
+          format: int64
+        name:
+          type: string
+          description: 任务名称
+        stopPhoneFlag:
+          type: integer
+          description: 任务结束是否关机，1=是，0=否
+          default: 0
+        remark:
+          type: string
+          description: 备注
+        taskList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddTaskListReqVO'
+            description: 新增任务请求对象
+          description: 任务集合
+      required:
+        - templateId
+        - name
+    RetryTaskReqVO: &ref_1
+      type: object
+      properties:
+        taskId:
+          type: integer
+          description: 任务id
+          format: int64
+      required:
+        - taskId
+    RetryDetailTaskReqVO:
+      type: object
+      properties:
+        detailTaskIds:
+          type: array
+          items:
+            type: integer
+          description: 详细任务id列表
+      required:
+        - detailTaskIds
+    AddTaskListReqVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: 手机id
+          format: int64
+        params:
+          $ref: '#/components/schemas/MapString'
+          description: 流程模板参数构建结果
+        startTime:
+          type: integer
+          description: 开始执行时间
+          format: int64
+      required:
+        - phoneId
+    UpdateTaskReqVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 任务id
+          format: int64
+        name:
+          type: string
+          description: 任务名称
+        stopPhoneFlag:
+          type: integer
+          description: 任务结束是否关机，1=是，0=否
+          default: 0
+        taskList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddTaskListReqVO'
+            description: 新增任务请求对象
+          description: 任务集合
+      required:
+        - id
+        - name
+    UpdateDetailTaskReqVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 任务id
+          format: int64
+        phoneId:
+          type: integer
+          description: 手机id
+          format: int64
+        params:
+          $ref: '#/components/schemas/MapString'
+          description: 流程模板参数构建结果
+        startTime:
+          type: integer
+          description: 任务开始时间
+          format: int64
+      required:
+        - id
+    StopTaskReqVO: *ref_1
+    StopDetailTaskReqVO: &ref_2
+      type: object
+      properties:
+        taskIds:
+          type: array
+          items:
+            type: integer
+          description: 任务ids
+      required:
+        - taskIds
+    DeleteTaskReqVO: *ref_1
+    DeleteDetailTaskReqVO: *ref_2
+    ClickActionReqVO: &ref_3
+      type: object
+      properties:
+        code:
+          type: string
+          description: 手机编号
+        posType:
+          type: integer
+          description: 位置类型：1=节点，2=固定坐标，3=范围位置
+          default: 1
+        query:
+          type: array
+          items:
+            type: string
+          description: 节点,格式[key=value,key=value,...]
+        pos:
+          type: array
+          items:
+            type: integer
+          description: |-
+            坐标 X,Y
+            坐标,格式[X,Y]
+        range:
+          type: array
+          items:
+            type: integer
+          description: |-
+            [x1,y1,x2,y2]
+            区域,格式[X1,Y1,X2,Y2]
+      required:
+        - code
+    DoubleClickActionReqVO: *ref_3
+    SwipeActionReqVO: &ref_4
+      type: object
+      properties:
+        code:
+          type: string
+          description: 手机编号
+        posType:
+          type: integer
+          description: |-
+            位置类型：1=节点，2=固定坐标，3=范围位置
+            位置1类型：1=节点，2=固定坐标，3=范围位置
+          default: 1
+        posType2:
+          type: integer
+          description: |-
+            位置类型：1=节点，2=固定坐标，3=范围位置
+            位置2类型：1=节点，2=固定坐标，3=范围位置
+          default: 1
+        query:
+          type: array
+          items:
+            type: string
+          description: 节点1,格式[key=value,key=value,...]
+        query2:
+          type: array
+          items:
+            type: string
+          description: 节点2,格式[key=value,key=value,...]
+        pos1:
+          type: array
+          items:
+            type: integer
+          description: |-
+            坐标 X,Y
+            坐标1,格式[X,Y]
+        pos2:
+          type: array
+          items:
+            type: integer
+          description: |-
+            x2,y2
+            坐标2,格式[X,Y]
+        range1:
+          type: array
+          items:
+            type: integer
+          description: |-
+            [x1,y1,x2,y2]
+            区域1,格式[X1,Y1,X2,Y2]
+        range2:
+          type: array
+          items:
+            type: integer
+          description: |-
+            [x1,y1,x2,y2]
+            区域2,格式[X1,Y1,X2,Y2]
+        duration:
+          type: integer
+          description: 持续时长
+        durationRange:
+          type: array
+          items:
+            type: integer
+          description: 持续时长范围
+      required:
+        - code
+    DragActionReqVO: *ref_4
+    InputActionReqVO:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 手机编号
+        inputType:
+          type: integer
+          description: 输入类型：1=直接输入，2=来源网络请求
+        text:
+          type: string
+          description: 输入内容
+        url:
+          type: string
+          description: |-
+            请求的URL
+            请求URL
+        waitTime:
+          type: integer
+          description: |-
+            等待结果时长
+            结果等待时长
+      required:
+        - code
+    LongClickActionReqVO:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 手机编号
+        posType:
+          type: integer
+          description: 位置类型：1=节点，2=固定坐标，3=范围位置
+          default: 1
+        query:
+          type: array
+          items:
+            type: string
+          description: 节点,格式[key=value,key=value,...]
+        pos:
+          type: array
+          items:
+            type: integer
+          description: |-
+            坐标 X,Y
+            坐标,格式[X,Y]
+        range:
+          type: array
+          items:
+            type: integer
+          description: |-
+            [x1,y1,x2,y2]
+            区域,格式[X1,Y1,X2,Y2]
+        duration:
+          type: integer
+          description: 持续时长
+        durationRange:
+          type: array
+          items:
+            type: integer
+          description: 持续时长范围
+      required:
+        - code
+    AppActionReqVO:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 手机编号
+        opType:
+          type: integer
+          description: |-
+            操作类型：1=启动APP、2=停止APP、3=清理数据(暂时不支持)、4=卸载APP
+            操作类型 1=启动APP、2=停止APP、4=卸载APP
+        pkg:
+          type: string
+          description: |-
+            APP包名
+            app包名
+      required:
+        - code
+        - opType
+        - pkg
+    ActionTaskStatusResVO:
+      type: object
+      properties:
+        taskId:
+          type: integer
+          description: 任务id
+          format: int64
+        taskStatus:
+          type: integer
+          description: 任务状态 -1=失败 0=执行中 1=成功 2=超时
+    RActionTaskStatusResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          $ref: '#/components/schemas/ActionTaskStatusResVO'
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    ActionTaskStatusReqVO:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 手机编号
+        taskId:
+          type: integer
+          description: 任务Id
+          format: int64
+      required:
+        - code
+        - taskId
+    PhoneScreenCapResVO:
+      type: object
+      properties:
+        url:
+          type: string
+          description: 截图 URL，有效期一小时
+    RPhoneScreenCapResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          $ref: '#/components/schemas/PhoneScreenCapResVO'
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    PhoneScreenCapReqVO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 手机 ID，由“获取手机列表”接口返回数据中的 ID。
+          format: int64
+        isRemove:
+          type: boolean
+          description: 执行完成后是否删除手机内容的截图文件(暂时不开放)
+          default: true
+      required:
+        - id
+    OpenApiPhoneCpyConnectResVO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: 访问令牌（token）
+        host:
+          type: string
+          description: 主机地址（host）
+    ROpenApiPhoneCpyConnectResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          $ref: '#/components/schemas/OpenApiPhoneCpyConnectResVO'
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    OpenApiGetCpyConnectReqVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: 手机 ID
+          format: int64
+      required:
+        - phoneId
+    GetRemoteComponentTokenResVO:
+      type: object
+      properties:
+        url:
+          type: string
+          description: 远程推流组件url
+    RGetRemoteComponentTokenResVO:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 请求链路 ID
+        code:
+          type: integer
+          description: 状态码
+        msg:
+          type: string
+          description: 请求返回消息
+        data:
+          $ref: '#/components/schemas/GetRemoteComponentTokenResVO'
+          description: 请求返回数据
+        status:
+          type: string
+          description: >-
+            状态，表示任务是立即完成还是处于等待状态：finish=已完成，pending=等待中
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+    GetRemoteComponentTokenReqVO:
+      type: object
+      properties:
+        phoneId:
+          type: integer
+          description: 手机Id
+          format: int64
+        showNavigation:
+          type: boolean
+          description: 是否显示三键导航，默认显示
+          default: true
+      required:
+        - phoneId
+    RVoid:
+      type: object
+      properties:
+        traceId:
+          type: string
+          description: 链路id
+        code:
+          type: integer
+          description: 编码
+        msg:
+          type: string
+          description: 信息
+        data:
+          description: 数据
+          type: 'null'
+        status:
+          type: string
+          description: 状态,代表本次是即时完成或者等待中的状态,finish或者pending
+          default: finish
+      required:
+        - traceId
+        - code
+        - msg
+        - status
+  responses: {}
+  securitySchemes: {}
+servers: []
+security: []
