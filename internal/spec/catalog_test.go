@@ -122,6 +122,9 @@ func TestKnownCommands(t *testing.T) {
 	if f := flag(t, start, "id"); !f.Required || f.In != "body" || f.Type != TypeInteger {
 		t.Fatalf("unexpected id flag: %+v", f)
 	}
+	if start.Async != "phone" || start.OperateType != "powerOn" {
+		t.Fatalf("start async = %q/%q", start.Async, start.OperateType)
+	}
 
 	create := find(t, catalog, "phone create")
 	for _, name := range []string{"spu-id", "sku-id", "num"} {
@@ -145,6 +148,9 @@ func TestKnownCommands(t *testing.T) {
 	}
 	if f := flag(t, click, "query"); f.Type != TypeStringArray {
 		t.Errorf("query type = %q", f.Type)
+	}
+	if click.Async != "action" {
+		t.Errorf("click async = %q", click.Async)
 	}
 
 	getTask := find(t, catalog, "rpa task get")

@@ -26,8 +26,8 @@ CI、服务器和第三方开发者机器上。
 | `--dry-run`、破坏性操作 `--yes` | ✅ |
 | 429 / 5xx 重试（GET，POST 默认不重试） | ✅ |
 | `--json` 嵌套请求体 | ✅ |
-| `phone file upload` 一体化上传 | ⏳ P1 |
-| `--wait` 异步任务轮询 | ⏳ P1 |
+| `phone file upload` 一体化上传（MD5 → 分片 → 合并推送） | ✅ |
+| `--wait` 异步任务轮询（开关机 / UI 动作） | ✅ |
 | MCP Server / Skills | ⏳ P3 |
 | npm / Homebrew / GoReleaser 发布 | ⏳ P3 |
 
@@ -108,15 +108,19 @@ pmock-cli product list
 pmock-cli phone list --page-size 10
 pmock-cli phone list --status 1 --format table
 
-# 开关机（返回 taskId；轮询用 phone task-status）
-pmock-cli phone start --id 123
-pmock-cli phone stop --id 123
-pmock-cli phone task-status --phone-id 123 --operate-type powerOn
+# 开关机（默认返回 taskId；--wait 等到终态并在 data.wait 里带回状态）
+pmock-cli phone start --id 123 --wait
+pmock-cli phone stop --id 123 --wait --wait-timeout 3m
 
 # 看屏与 UI 自动化（动作类用 code，不是 id）
 pmock-cli phone screen --id 123
-pmock-cli phone action click --code A1 --pos-type 2 --pos 100,200
-pmock-cli phone action input --code A1 --text "hello"
+pmock-cli phone action click --code A1 --pos-type 2 --pos 100,200 --wait
+pmock-cli phone action input --code A1 --text "hello" --wait
+
+# 文件上传：自动算 MD5、分片、合并并推送到手机
+pmock-cli phone file upload --id 123 --file ./video.mp4
+pmock-cli phone file upload --id 123 --file ./app.apk --type app
+pmock-cli phone file upload --id 123 --file ./video.mp4 --dest /sdcard/Movies
 
 # 应用
 pmock-cli app list --id 123 --page-size 20
@@ -143,6 +147,44 @@ pmock-cli commands | jq '.[] | select(.risk=="destructive") | .path'
 ```
 
 ---
+
+## 文件上传
+
+`phone file upload` 把 `minio/init/task`、分片 PUT、`completeAndPush` 串成一条命令：
+
+```bash
+pmock-cli phone file upload --id 123 --file ./video.mp4
+```
+
+- 自动计算 MD5 作为 `identifier`（可用 `--md5` 跳过）；
+- 默认分片 30 MiB，可用 `--chunk-size-mb` 调整（30–300）；
+- `--type app` 用于 APK，返回的 `data.envFileId` 可直接传给 `app install --file-id`；
+- 默认推送到 `/sdcard/Download`，可用 `--dest` 覆盖；
+- 断点续传：服务端返回已上传分片时会跳过；
+- `--dry-run` 只打印文件大小、MD5、分片数与目标，不发请求。
+
+## 异步等待
+
+`phone start/stop/restart/reset/new` 和 `phone action *` 支持：
+
+```bash
+pmock-cli phone start --id 123 --wait
+pmock-cli phone action click --code A1 --pos-type 2 --pos 100,200 --wait
+```
+
+等待结果会写进同一个 JSON 信封的 `data.wait`：
+
+```json
+{
+  "taskId": 1,
+  "wait": { "ok": true, "taskStatus": 2, "phoneStatus": 1, "attempts": 2, "waitedMs": 1200 }
+}
+```
+
+- 开机成功 = `taskStatus=2` 且 `phoneStatus=1`；关机成功 = `phoneStatus=4`；
+- 动作成功 = `taskStatus=2`，失败 = `3`（部分后端也用 `-1`）；
+- 超时退出码为 3，任务失败退出码为 1，信封仍输出；
+- `--wait-timeout` 默认 3 分钟，`--poll-interval` 默认 2 秒。
 
 ## 复杂请求体
 
@@ -224,8 +266,8 @@ cmd            ── Cobra 命令树（运行时生成）
 3. **没有 2,700 行复制粘贴**：请求编码、类型转换、必填校验只有一份实现。
 4. **保留人工控制**：命令命名、风险级别、示例由 overlay 决定，不是机械推导。
 
-`overlay.yaml` 中 `internal: true` 的 operation 仍然可调用，但不出现在 help 里，
-用于后续封装 `phone file upload` 这类多步流程。
+`overlay.yaml` 中 `internal: true` 的 operation 仍然可调用，但不出现在 help 里；
+`phone file upload` 就是基于 `upload-init` / `upload-push` 封装的多步命令。
 
 ---
 
@@ -270,8 +312,8 @@ pmock-cli phone list --page-size 1
 
 ## Roadmap
 
-- **P1**：`phone file upload` 一体化（init → 分片 PUT → completeAndPush）、`--wait` 轮询、
-  批量封装、字段级 `--json` schema 提示
+- **P1**：批量封装（批量开关机/安装）、按名称或 code 唯一匹配、字段级 `--json` schema 提示、
+  真实 AK/SK 只读冒烟
 - **P2**：RPA 任务的 add/update/retry 高层封装、文件下载、推流地址、远程连接
 - **P3**：`pmock-cli mcp`（复用同一 catalog 生成 action）、Skills 文档生成、
   GoReleaser + npm wrapper + Homebrew + Docker

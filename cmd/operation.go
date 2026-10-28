@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -38,6 +39,11 @@ func newOperationCmd(sc *spec.Command, g *globals) *cobra.Command {
 	}
 	if sc.HasJSONInput() {
 		c.Flags().String("json", "", "request body as a JSON object, or @file.json, or - for stdin; flags override its keys")
+	}
+	if sc.CanWait() {
+		c.Flags().Bool("wait", false, "wait for the async task to reach a terminal state")
+		c.Flags().Duration("wait-timeout", 3*time.Minute, "maximum time to wait for the task")
+		c.Flags().Duration("poll-interval", 2*time.Second, "polling interval while waiting")
 	}
 	c.RunE = func(cmd *cobra.Command, args []string) error {
 		return runOperation(cmd, sc, byName, g)
@@ -134,10 +140,35 @@ func runOperation(cmd *cobra.Command, sc *spec.Command, byName map[string]*spec.
 	defer cancel()
 
 	env, err := c.Do(ctx, client.Request{Method: sc.Method, Path: path, Query: query, Body: body})
-	if env != nil {
-		if rerr := output.Render(cmd.OutOrStdout(), env, output.Options{Format: g.format, Compact: g.compact}); rerr != nil {
-			return exitcode.Runtimef("failed to render response: %v", rerr)
+	if err == nil && env != nil && sc.CanWait() {
+		wait, _ := cmd.Flags().GetBool("wait")
+		if wait {
+			if werr := waitForTask(cmd, c, sc, env); werr != nil {
+				if rerr := renderEnvelope(cmd, g, env); rerr != nil {
+					return exitcode.Runtimef("failed to render response: %v", rerr)
+				}
+				return werr
+			}
 		}
+	}
+	return finish(cmd, g, env, err)
+}
+
+func renderEnvelope(cmd *cobra.Command, g *globals, env *client.Envelope) error {
+	if env == nil {
+		return nil
+	}
+	if err := output.Render(cmd.OutOrStdout(), env, output.Options{Format: g.format, Compact: g.compact}); err != nil {
+		return exitcode.Runtimef("failed to render response: %v", err)
+	}
+	return nil
+}
+
+// finish renders the envelope (when present) and maps the outcome to the exit
+// contract. Shared by generated operations and hand-written commands.
+func finish(cmd *cobra.Command, g *globals, env *client.Envelope, err error) error {
+	if rerr := renderEnvelope(cmd, g, env); rerr != nil {
+		return rerr
 	}
 	if err == nil {
 		return nil

@@ -33,6 +33,10 @@ text, unlike the JSON envelope used by API commands.`,
 				return nil
 			}
 			path := strings.Join(args, " ")
+			if path == "phone file upload" {
+				printUploadDoc(out)
+				return nil
+			}
 			var match *spec.Command
 			for _, c := range catalog.Commands {
 				if c.FullPath() == path {
@@ -57,46 +61,53 @@ text, unlike the JSON envelope used by API commands.`,
 	}
 }
 
+type flagInfo struct {
+	Name     string `json:"name"`
+	Type     string `json:"type"`
+	Field    string `json:"field"`
+	In       string `json:"in"`
+	Required bool   `json:"required"`
+}
+
+type commandInfo struct {
+	Path        string     `json:"path"`
+	Aliases     []string   `json:"aliases,omitempty"`
+	Method      string     `json:"method"`
+	HTTPPath    string     `json:"httpPath"`
+	Summary     string     `json:"summary"`
+	Risk        string     `json:"risk"`
+	Hidden      bool       `json:"hidden,omitempty"`
+	HasBody     bool       `json:"hasBody,omitempty"`
+	JSONInput   bool       `json:"jsonInput,omitempty"`
+	Async       string     `json:"async,omitempty"`
+	OperateType string     `json:"operateType,omitempty"`
+	Flags       []flagInfo `json:"flags"`
+}
+
 func newCommandsCmd(catalog *spec.Catalog) *cobra.Command {
 	return &cobra.Command{
 		Use:   "commands",
 		Short: "List every command as JSON (machine-readable catalog)",
 		Long: `Print the full command catalog. This is the stable input for agents,
-shell completion and the future MCP server.`,
+shell completion and the future MCP server. Hand-written multi-step commands
+are included next to the generated ones.`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			type flagInfo struct {
-				Name     string `json:"name"`
-				Type     string `json:"type"`
-				Field    string `json:"field"`
-				In       string `json:"in"`
-				Required bool   `json:"required"`
-			}
-			type cmdInfo struct {
-				Path      string     `json:"path"`
-				Aliases   []string   `json:"aliases,omitempty"`
-				Method    string     `json:"method"`
-				HTTPPath  string     `json:"httpPath"`
-				Summary   string     `json:"summary"`
-				Risk      string     `json:"risk"`
-				Hidden    bool       `json:"hidden,omitempty"`
-				HasBody   bool       `json:"hasBody,omitempty"`
-				JSONInput bool       `json:"jsonInput,omitempty"`
-				Flags     []flagInfo `json:"flags"`
-			}
-			out := make([]cmdInfo, 0, len(catalog.Commands))
+			out := make([]commandInfo, 0, len(catalog.Commands)+2)
 			for _, c := range catalog.Commands {
-				ci := cmdInfo{
-					Path:      c.FullPath(),
-					Aliases:   c.Aliases,
-					Method:    c.Method,
-					HTTPPath:  c.Path,
-					Summary:   c.Summary,
-					Risk:      string(c.Risk),
-					Hidden:    c.Internal,
-					HasBody:   c.HasBody(),
-					JSONInput: c.HasJSONInput(),
-					Flags:     make([]flagInfo, 0, len(c.Flags)),
+				ci := commandInfo{
+					Path:        c.FullPath(),
+					Aliases:     c.Aliases,
+					Method:      c.Method,
+					HTTPPath:    c.Path,
+					Summary:     c.Summary,
+					Risk:        string(c.Risk),
+					Hidden:      c.Internal,
+					HasBody:     c.HasBody(),
+					JSONInput:   c.HasJSONInput(),
+					Async:       c.Async,
+					OperateType: c.OperateType,
+					Flags:       make([]flagInfo, 0, len(c.Flags)),
 				}
 				for _, f := range c.Flags {
 					ci.Flags = append(ci.Flags, flagInfo{
@@ -105,6 +116,7 @@ shell completion and the future MCP server.`,
 				}
 				out = append(out, ci)
 			}
+			out = append(out, extraCommandInfos()...)
 			b, err := json.MarshalIndent(out, "", "  ")
 			if err != nil {
 				return exitcode.Runtimef("failed to encode catalog: %v", err)
@@ -194,4 +206,14 @@ func printCommandDoc(w io.Writer, c *spec.Command) {
 	if c.HasJSONInput() {
 		fmt.Fprintln(w, "  --json <object|@file|->   merge a JSON object into the request body")
 	}
+	if c.CanWait() {
+		fmt.Fprintln(w, "  --wait                    wait for the async task to reach a terminal state")
+		fmt.Fprintln(w, "  --wait-timeout duration   maximum wait (default 3m)")
+		fmt.Fprintln(w, "  --poll-interval duration  polling interval (default 2s)")
+	}
+}
+
+func printUploadDoc(w io.Writer) {
+	c := newPhoneFileUploadCmd(&globals{})
+	fmt.Fprintf(w, "pmock-cli phone file upload\n\n%s\n\nFLAGS\n%s", phoneFileUploadLong, c.Flags().FlagUsages())
 }

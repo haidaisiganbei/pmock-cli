@@ -76,11 +76,13 @@ type Command struct {
 	Summary     string
 	Description string
 
-	PathParts []string
-	Aliases   []string
-	Risk      Risk
-	Internal  bool
-	Examples  []string
+	PathParts   []string
+	Aliases     []string
+	Risk        Risk
+	Internal    bool
+	Async       string
+	OperateType string
+	Examples    []string
 
 	Flags []*Flag
 	// ComplexRequired lists required body fields that cannot be a flag
@@ -125,6 +127,9 @@ func (c *Command) LongHelp() string {
 	if c.HasJSONInput() {
 		b.WriteString("\nBody: pass individual flags, or --json '<object>' / --json @file.json to supply nested fields")
 	}
+	if c.CanWait() {
+		b.WriteString("\nWait: --wait polls the task to a terminal state (--wait-timeout, --poll-interval)")
+	}
 	if len(c.ComplexRequired) > 0 {
 		b.WriteString("\nRequired nested body fields (use --json): ")
 		b.WriteString(strings.Join(c.ComplexRequired, ", "))
@@ -137,6 +142,9 @@ func (c *Command) HasJSONInput() bool { return c.Body != nil }
 
 // HasBody reports whether the operation sends a JSON body.
 func (c *Command) HasBody() bool { return c.Body != nil }
+
+// CanWait reports whether --wait is available for this command.
+func (c *Command) CanWait() bool { return c.Async != "" }
 
 // Catalog is the full command surface.
 type Catalog struct {
@@ -180,6 +188,8 @@ func buildCommand(doc *Document, ref OperationRef, ov *CommandOverride) (*Comman
 	risk := defaultRisk(ref.Method)
 	var aliases, examples []string
 	internal := false
+	async := ""
+	operateType := ""
 	if ov != nil {
 		if len(ov.Path) > 0 {
 			pathParts = append([]string{}, ov.Path...)
@@ -187,9 +197,17 @@ func buildCommand(doc *Document, ref OperationRef, ov *CommandOverride) (*Comman
 		aliases = append([]string{}, ov.Aliases...)
 		examples = append([]string{}, ov.Examples...)
 		internal = ov.Internal
+		async = ov.Async
+		operateType = ov.OperateType
 		if ov.Risk != "" {
 			risk = Risk(ov.Risk)
 		}
+	}
+	if async != "" && async != "phone" && async != "action" {
+		return nil, fmt.Errorf("invalid async %q", async)
+	}
+	if async == "phone" && operateType == "" {
+		return nil, fmt.Errorf("async phone requires operate_type")
 	}
 	if len(pathParts) == 0 {
 		return nil, fmt.Errorf("empty command path")
@@ -216,6 +234,8 @@ func buildCommand(doc *Document, ref OperationRef, ov *CommandOverride) (*Comman
 		Aliases:         aliases,
 		Risk:            risk,
 		Internal:        internal,
+		Async:           async,
+		OperateType:     operateType,
 		Examples:        examples,
 		Flags:           flags,
 		ComplexRequired: complexRequired,

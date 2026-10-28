@@ -168,7 +168,16 @@ Use "pmock-cli docs <command>" for the full flag table of any command.`,
 	root.AddCommand(newVersionCmd())
 
 	addCatalog(root, catalog, g)
+	addExtraCommands(root, g)
 	return root
+}
+
+// addExtraCommands registers hand-written commands that need more than one
+// API call. They live next to the generated tree and share the same flags,
+// output and exit contract.
+func addExtraCommands(root *cobra.Command, g *globals) {
+	phoneFile := ensureGroup(root, []string{"phone", "file"})
+	phoneFile.AddCommand(newPhoneFileUploadCmd(g))
 }
 
 func addCatalog(root *cobra.Command, catalog *spec.Catalog, g *globals) {

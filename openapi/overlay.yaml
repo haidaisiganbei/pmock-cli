@@ -67,27 +67,37 @@ commands:
   - op: POST /open/api/phone/start
     path: [phone, start]
     risk: write
+    async: phone
+    operate_type: powerOn
     examples:
       - pmock-cli phone start --id 123
 
   - op: POST /open/api/phone/stop
     path: [phone, stop]
     risk: write
+    async: phone
+    operate_type: powerOff
     examples:
       - pmock-cli phone stop --id 123
 
   - op: POST /open/api/phone/restart
     path: [phone, restart]
     risk: write
+    async: phone
+    operate_type: restart
 
   - op: POST /open/api/phone/reset
     path: [phone, reset]
     risk: destructive
+    async: phone
+    operate_type: reset
 
   - op: POST /open/api/phone/oneNew
     path: [phone, new]
     aliases: [one-new]
     risk: destructive
+    async: phone
+    operate_type: renew
 
   - op: POST /open/api/phone/clear
     path: [phone, clear]
@@ -231,6 +241,7 @@ commands:
     path: [phone, action, click]
     aliases: [tap]
     risk: write
+    async: action
     examples:
       - pmock-cli phone action click --code ABC123 --pos-type 2 --pos 100,200
       - pmock-cli phone action click --code ABC123 --pos-type 1 --query "text=登录,index=0"
@@ -238,26 +249,32 @@ commands:
   - op: POST /open/api/phone/action/doubleClick
     path: [phone, action, double-click]
     risk: write
+    async: action
 
   - op: POST /open/api/phone/action/swipe
     path: [phone, action, swipe]
     risk: write
+    async: action
 
   - op: POST /open/api/phone/action/drag
     path: [phone, action, drag]
     risk: write
+    async: action
 
   - op: POST /open/api/phone/action/input
     path: [phone, action, input]
     risk: write
+    async: action
 
   - op: POST /open/api/phone/action/longClick
     path: [phone, action, long-click]
     risk: write
+    async: action
 
   - op: POST /open/api/phone/action/app
     path: [phone, action, app]
     risk: write
+    async: action
 
   - op: POST /open/api/phone/action/task/status
     path: [phone, action, status]
