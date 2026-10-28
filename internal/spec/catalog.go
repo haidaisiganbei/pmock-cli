@@ -49,6 +49,9 @@ func (f *Flag) Help() string {
 	if desc != "" {
 		parts = append(parts, desc)
 	}
+	if f.Type == TypeStringArray || f.Type == TypeIntArray {
+		parts = append(parts, "comma-separated")
+	}
 	if len(f.Enum) > 0 {
 		vals := make([]string, 0, len(f.Enum))
 		for _, v := range f.Enum {
