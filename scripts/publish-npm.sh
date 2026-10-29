@@ -1,34 +1,59 @@
 #!/usr/bin/env bash
-# Publish the npm platform packages and wrapper. Run this from a terminal so
-# npm can prompt for a 2FA one-time password.
+# Publish the npm platform packages and wrapper idempotently.
 #
 #   VERSION=0.1.2 ./scripts/publish-npm.sh
-set -euo pipefail
+#
+# Existing versions are skipped. A platform package that npm rejects (for
+# example Windows spam review) is reported but does not block the wrapper:
+# npm treats optionalDependencies as optional, so macOS/Linux installs still
+# work while the Windows package is being reviewed.
+set -uo pipefail
 
 cd "$(dirname "$0")/.."
 
 VERSION="${VERSION:?set VERSION, e.g. VERSION=0.1.2}"
 DIR="${DIR:-npm/build}"
 REGISTRY="${REGISTRY:-https://registry.npmjs.org}"
+failures=0
 
 if [ ! -f "$DIR/pmock-cli-${VERSION}.tgz" ]; then
   echo "missing $DIR/pmock-cli-${VERSION}.tgz; run: VERSION=$VERSION make npm" >&2
   exit 1
 fi
 
-echo "npm user: $(npm whoami --registry "$REGISTRY")"
+echo "npm user: $(npm whoami --registry "$REGISTRY" 2>/dev/null || echo unknown)"
 echo "publishing pmock-cli@${VERSION} to ${REGISTRY}"
 
+publish_one() {
+  local name="$1"
+  local file="$2"
+  if npm view "${name}@${VERSION}" version --registry "$REGISTRY" >/dev/null 2>&1; then
+    echo "skip ${name}@${VERSION} (already published)"
+    return 0
+  fi
+  echo "→ ${name}@${VERSION}"
+  if npm publish "$file" --registry "$REGISTRY" --access public; then
+    echo "published ${name}@${VERSION}"
+  else
+    echo "WARN: failed to publish ${name}@${VERSION}" >&2
+    failures=$((failures + 1))
+  fi
+}
+
 for platform in darwin-arm64 darwin-x64 linux-x64 linux-arm64 win32-x64; do
-  f="$DIR/pmock-cli-${platform}-${VERSION}.tgz"
-  echo "→ $(basename "$f")"
-  npm publish "$f" --registry "$REGISTRY" --access public
+  publish_one "pmock-cli-${platform}" "$DIR/pmock-cli-${platform}-${VERSION}.tgz"
 done
 
-echo "→ pmock-cli-${VERSION}.tgz (wrapper)"
-npm publish "$DIR/pmock-cli-${VERSION}.tgz" --registry "$REGISTRY" --access public
+publish_one "pmock-cli" "$DIR/pmock-cli-${VERSION}.tgz"
 
-echo
-echo "verify:"
-echo "  npm view pmock-cli version --registry $REGISTRY"
-echo "  npm install -g pmock-cli@${VERSION} --registry $REGISTRY"
+if npm view "pmock-cli@${VERSION}" version --registry "$REGISTRY" >/dev/null 2>&1; then
+  echo
+  echo "wrapper available: npm install -g pmock-cli@${VERSION}"
+  if [ "$failures" -gt 0 ]; then
+    echo "note: $failures platform package(s) still need attention; wrapper installs only matching platforms." >&2
+  fi
+  exit 0
+fi
+
+echo "wrapper was not published" >&2
+exit 1

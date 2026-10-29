@@ -30,12 +30,5 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - name: build packages
         run: VERSION="${VERSION#v}" make npm
-      - name: publish platform packages
-        run: |
-          for f in npm/build/pmock-cli-darwin-*.tgz \
-                   npm/build/pmock-cli-linux-*.tgz \
-                   npm/build/pmock-cli-win32-*.tgz; do
-            npm publish "$f" --access public
-          done
-      - name: publish wrapper
-        run: npm publish "npm/build/pmock-cli-${VERSION#v}.tgz" --access public
+      - name: publish packages
+        run: VERSION="${VERSION#v}" ./scripts/publish-npm.sh
