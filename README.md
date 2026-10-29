@@ -50,14 +50,14 @@ CI、服务器和第三方开发者机器上。
 curl -fsSL https://raw.githubusercontent.com/haidaisiganbei/pmock-cli/main/scripts/install.sh | sh
 ```
 
-npm（发布到 registry 后）：
+npm（已发布）：
 
 ```bash
 npm install -g pmock-cli@latest
 ```
 
-> npm 包已构建完成，但当前 npm 账号尚未发布；先使用上面的 install.sh，
-> 或在 `npm login` 后执行 `VERSION=0.1.2 make npm` + `npm publish`。
+> macOS / Linux 已验证可用。Windows 平台包 `pmock-cli-win32-x64` 仍被 npm
+> 的 spam 审核拦截，Windows 暂时请下载 Release 中的 `.zip`。
 
 预编译二进制（macOS / Linux / Windows）：
 
@@ -384,7 +384,7 @@ git push origin v0.1.0
 npm 包（平台包 + wrapper）：
 
 ```bash
-VERSION=0.1.0 make npm
+VERSION=0.1.2 make npm
 ```
 
 发布前在仓库 Secrets 中配置 `NPM_TOKEN`；发布 GitHub Release 时
@@ -442,4 +442,4 @@ pmock-cli phone list --page-size 1
 - **P1**：批量封装（批量开关机/安装）、按名称或 code 唯一匹配、字段级 `--json` schema 提示、
   真实 AK/SK 只读冒烟
 - **P2**：RPA 任务的 add/update/retry 高层封装、文件下载、推流地址、远程连接
-- **P3**：Skills 文档生成、Homebrew formula、Docker 镜像、正式 npm 发布
+- **P3**：Skills 文档生成、Docker 镜像、Windows npm 包审核跟进
