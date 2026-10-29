@@ -105,10 +105,10 @@ Exit code is 2 for missing credentials and 3 for network/auth failures.`,
 				})
 				cancel()
 				latency := time.Since(start).Milliseconds()
-				if apiErr == nil && env != nil && env.Code == 0 {
+				if apiErr == nil && env != nil && env.OK() {
 					checks = append(checks, doctorCheck{
 						Name: "api", OK: true,
-						Detail: fmt.Sprintf("code=0 latency=%dms traceId=%s", latency, env.TraceID),
+						Detail: fmt.Sprintf("code=%d latency=%dms traceId=%s", env.Code, latency, env.TraceID),
 					})
 				} else {
 					msg := "request failed"

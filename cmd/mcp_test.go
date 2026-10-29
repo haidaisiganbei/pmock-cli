@@ -100,7 +100,7 @@ func TestMCPCallToolSuccess(t *testing.T) {
 	t.Setenv("PMOCK_ACCESS_KEY", "AK")
 	t.Setenv("PMOCK_SECRET_KEY", "SK")
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`{"traceId":"mcp-ok","code":0,"msg":"success","data":{"rows":[{"id":1}]}}`))
+		_, _ = w.Write([]byte(`{"traceId":"mcp-ok","code":200,"msg":"查询成功","data":{"rows":[{"id":1}]}}`))
 	}))
 	defer srv.Close()
 	t.Setenv("PMOCK_BASE_URL", srv.URL+"/api")

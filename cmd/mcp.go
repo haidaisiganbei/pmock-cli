@@ -221,7 +221,7 @@ func (s *mcpServer) callTool(ctx context.Context, t *mcpTool, args mcpArgs) (*mc
 		Code int    `json:"code"`
 		Msg  string `json:"msg"`
 	}
-	if json.Unmarshal([]byte(stdout), &env) == nil && env.Code != 0 {
+	if json.Unmarshal([]byte(stdout), &env) == nil && env.Code != 0 && env.Code != 200 {
 		text += "\n\n" + s.helpText(ctx, action.Path)
 		return mcpError(text), nil, nil
 	}

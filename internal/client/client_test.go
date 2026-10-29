@@ -170,3 +170,19 @@ func TestHTTP500WithEnvelope(t *testing.T) {
 		t.Fatalf("err = %v, want APIError 10123", err)
 	}
 }
+
+func TestSuccessCode200(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"traceId":"t200","code":200,"msg":"查询成功","data":null,"status":"finish"}`))
+	}))
+	defer srv.Close()
+
+	c := New(srv.URL, testAK, testSK, time.Second)
+	env, err := c.Do(context.Background(), Request{Method: "GET", Path: "/open/api/phone/list"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !env.OK() || env.Code != 200 {
+		t.Fatalf("envelope = %+v", env)
+	}
+}

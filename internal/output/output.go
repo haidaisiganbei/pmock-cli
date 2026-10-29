@@ -67,7 +67,7 @@ func renderPretty(w io.Writer, env *client.Envelope) error {
 		fmt.Fprintf(w, "TraceID: %s\n", env.TraceID)
 	}
 	if env.OK() {
-		fmt.Fprintf(w, "Status:  OK (code=0, %s)\n", env.Msg)
+		fmt.Fprintf(w, "Status:  OK (code=%d, %s)\n", env.Code, env.Msg)
 	} else {
 		fmt.Fprintf(w, "Status:  FAILED (code=%d, %s)\n", env.Code, env.Msg)
 	}

@@ -4,7 +4,7 @@
 // exit code instead of parsing stderr:
 //
 //	0  success
-//	1  business failure (API envelope code != 0)
+//	1  business failure (API envelope code is not 0/200)
 //	2  usage or configuration error (nothing was sent)
 //	3  runtime failure (network, timeout, 5xx, malformed response)
 //

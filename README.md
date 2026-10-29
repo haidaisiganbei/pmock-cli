@@ -288,6 +288,8 @@ pmock-cli rpa task add --template-id 9 --name daily --json @task.json --dry-run
 }
 ```
 
+`code = 0` 和 `code = 200` 都表示成功（测试环境返回 200）；其他 code 为失败。
+
 `--format`：
 
 - `json`（默认）：原样信封，可 `| jq`
@@ -299,7 +301,7 @@ pmock-cli rpa task add --template-id 9 --name daily --json @task.json --dry-run
 | 码 | 含义 |
 | --- | --- |
 | 0 | 成功 |
-| 1 | 业务失败（API `code != 0`，信封仍输出到 stdout） |
+| 1 | 业务失败（API `code` 不是 0/200，信封仍输出到 stdout） |
 | 2 | 用法 / 配置错误（未发请求） |
 | 3 | 运行时失败（网络、超时、5xx、AK/SK 被拒） |
 

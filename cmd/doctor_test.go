@@ -27,7 +27,7 @@ func TestDoctorSuccess(t *testing.T) {
 	t.Setenv("PMOCK_ACCESS_KEY", "")
 	t.Setenv("PMOCK_SECRET_KEY", "")
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`{"traceId":"doctor","code":0,"msg":"success","data":{"rows":[]}}`))
+		_, _ = w.Write([]byte(`{"traceId":"doctor","code":200,"msg":"查询成功","data":null}`))
 	}))
 	defer srv.Close()
 

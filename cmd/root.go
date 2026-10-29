@@ -130,7 +130,7 @@ PMOCK_SECRET_KEY.
 
 EXIT CODES
   0  success
-  1  business failure (API envelope code != 0)
+  1  business failure (API envelope code is not 0 or 200)
   2  usage or configuration error (nothing sent)
   3  runtime failure (network, timeout, 5xx, bad credentials)
 

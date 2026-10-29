@@ -32,8 +32,10 @@ type Envelope struct {
 	Status  string          `json:"status"`
 }
 
-// OK reports whether the business code indicates success.
-func (e *Envelope) OK() bool { return e != nil && e.Code == 0 }
+// OK reports whether the business code indicates success. The public API
+// returns 200 for success in some deployments (notably the test environment)
+// and 0 in others; the MCP layer normalizes both to zero for clients.
+func (e *Envelope) OK() bool { return e != nil && (e.Code == 0 || e.Code == 200) }
 
 // APIError is a non-zero business code returned by the API.
 type APIError struct {
@@ -196,7 +198,7 @@ func (c *Client) once(ctx context.Context, method, endpoint string, body []byte)
 		// A valid envelope is authoritative; only fall back to HTTPError when
 		// the body is not one.
 		var probe Envelope
-		if json.Unmarshal(raw, &probe) == nil && probe.Code != 0 {
+		if json.Unmarshal(raw, &probe) == nil && probe.Code != 0 && probe.Code != 200 {
 			return &probe, 0, nil
 		}
 		return nil, retryAfter, &HTTPError{StatusCode: resp.StatusCode, Body: string(raw)}
