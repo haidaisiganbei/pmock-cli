@@ -178,3 +178,48 @@ func TestWaitTimeout(t *testing.T) {
 		t.Fatalf("wait = %#v", wait)
 	}
 }
+
+func TestWaitRPA(t *testing.T) {
+	t.Setenv("PMOCK_CLI_CONFIG", t.TempDir()+"/none.json")
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/api/open/api/rpa/task/add":
+			_, _ = w.Write([]byte(`{"traceId":"rpa-add","code":0,"msg":"success","data":{"taskId":7}}`))
+		case "/api/open/api/rpa/task/getInfo/7":
+			n := atomic.AddInt32(&calls, 1)
+			if n == 1 {
+				_, _ = w.Write([]byte(`{"traceId":"rpa-1","code":0,"msg":"success","data":{"id":7,"status":1}}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"traceId":"rpa-2","code":0,"msg":"success","data":{"id":7,"status":2}}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer srv.Close()
+
+	sc := testCommand(t, testCatalog(t), "rpa task add")
+	cmd := prepare(t, sc)
+	_ = cmd.Flags().Set("template-id", "9")
+	_ = cmd.Flags().Set("name", "daily")
+	_ = cmd.Flags().Set("wait", "true")
+	_ = cmd.Flags().Set("wait-timeout", "2s")
+	_ = cmd.Flags().Set("poll-interval", "50ms")
+	var stdout bytes.Buffer
+	cmd.SetOut(&stdout)
+	cmd.SetErr(&bytes.Buffer{})
+
+	if err := runOperation(cmd, sc, flagMap(sc), testGlobals(srv.URL+"/api")); err != nil {
+		t.Fatal(err)
+	}
+	out := decodeResult(t, &stdout)
+	data := out["data"].(map[string]any)
+	if data["taskId"].(float64) != 7 {
+		t.Fatalf("data = %#v", data)
+	}
+	wait := data["wait"].(map[string]any)
+	if wait["ok"] != true || wait["taskStatus"].(float64) != 2 {
+		t.Fatalf("wait = %#v", wait)
+	}
+}

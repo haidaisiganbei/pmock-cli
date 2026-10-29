@@ -9,7 +9,7 @@ LDFLAGS := -s -w \
 	-X $(MODULE)/internal/build.Date=$(DATE)
 PREFIX  ?= /usr/local
 
-.PHONY: build test vet fmt check install clean snapshot run update-spec
+.PHONY: build test vet fmt check install clean snapshot run update-spec package
 
 build:
 	go build -trimpath -ldflags "$(LDFLAGS)" -o bin/$(BINARY) .
@@ -38,6 +38,9 @@ run: build
 
 update-spec:
 	./scripts/update-spec.sh
+
+package:
+	./scripts/package.sh
 
 clean:
 	rm -rf bin dist

@@ -53,8 +53,8 @@ func TestBuildMCPTools(t *testing.T) {
 			paths[key] = true
 		}
 	}
-	if total != 62 {
-		t.Fatalf("actions = %d, want 62", total)
+	if total != 63 {
+		t.Fatalf("actions = %d, want 63", total)
 	}
 	if !paths["phone file upload"] {
 		t.Error("phone file upload action is missing")

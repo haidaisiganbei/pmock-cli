@@ -59,6 +59,8 @@ func waitForTask(cmd *cobra.Command, c *client.Client, sc *spec.Command, env *cl
 		return waitPhone(ctx, cmd, c, sc, env, info, interval)
 	case "action":
 		return waitAction(ctx, cmd, c, env, info, interval)
+	case "rpa":
+		return waitRPA(ctx, c, env, info, interval)
 	default:
 		return exitcode.Usagef("command %s has no async policy", sc.FullPath())
 	}
@@ -209,6 +211,59 @@ func waitAction(ctx context.Context, cmd *cobra.Command, c *client.Client, env *
 			info.TimedOut = true
 			info.Error = "timeout"
 			return exitcode.Runtimef("timed out waiting for action task %d", taskID)
+		}
+	}
+}
+
+func waitRPA(ctx context.Context, c *client.Client, env *client.Envelope, info *waitInfo, interval time.Duration) error {
+	taskID, ok := taskIDFromData(env.Data)
+	if !ok || taskID <= 0 {
+		info.Error = "response has no taskId"
+		return exitcode.Runtimef("the API response does not contain a task id; cannot wait")
+	}
+
+	for {
+		res, err := c.Do(ctx, client.Request{
+			Method: "GET",
+			Path:   fmt.Sprintf("/open/api/rpa/task/getInfo/%d", taskID),
+		})
+		info.Attempts++
+		if err != nil {
+			info.Error = err.Error()
+			return exitcode.Runtimef("failed to poll RPA task: %v", err)
+		}
+
+		var st struct {
+			Status *int `json:"status"`
+		}
+		if err := json.Unmarshal(res.Data, &st); err != nil {
+			info.Error = "invalid RPA task payload"
+			return exitcode.Runtimef("failed to parse RPA task: %v", err)
+		}
+		if st.Status != nil {
+			v := *st.Status
+			info.TaskStatus = &v
+			switch v {
+			case 2:
+				info.OK = true
+				return nil
+			case 3, 4:
+				info.Error = "RPA task failed"
+				return exitcode.New(exitcode.Business,
+					fmt.Errorf("RPA task %d failed (status=%d)", taskID, v))
+			}
+		}
+
+		if ctx.Err() != nil {
+			info.TimedOut = true
+			info.Error = "timeout"
+			return exitcode.Runtimef("timed out waiting for RPA task %d (last status=%s)",
+				taskID, formatIntPtr(info.TaskStatus))
+		}
+		if !sleep(ctx, interval) {
+			info.TimedOut = true
+			info.Error = "timeout"
+			return exitcode.Runtimef("timed out waiting for RPA task %d", taskID)
 		}
 	}
 }

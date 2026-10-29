@@ -28,7 +28,7 @@ CI、服务器和第三方开发者机器上。
 | `--json` 嵌套请求体 | ✅ |
 | `phone file upload` 一体化上传（MD5 → 分片 → 合并推送） | ✅ |
 | `--wait` 异步任务轮询（开关机 / UI 动作） | ✅ |
-| `pmock-cli mcp`（12 个分组 tool / 62 个 action） | ✅ |
+| `pmock-cli mcp`（12 个分组 tool / 63 个 action） | ✅ |
 | Skills 文档生成 / npm / Homebrew / Release | ⏳ P3 |
 
 ---
@@ -165,11 +165,12 @@ pmock-cli phone file upload --id 123 --file ./video.mp4
 
 ## 异步等待
 
-`phone start/stop/restart/reset/new` 和 `phone action *` 支持：
+`phone start/stop/restart/reset/new`、`phone action *` 和 `rpa task add` 支持：
 
 ```bash
 pmock-cli phone start --id 123 --wait
 pmock-cli phone action click --code A1 --pos-type 2 --pos 100,200 --wait
+pmock-cli rpa task add --template-id 9 --name daily --json @task.json --wait
 ```
 
 等待结果会写进同一个 JSON 信封的 `data.wait`：
@@ -183,8 +184,18 @@ pmock-cli phone action click --code A1 --pos-type 2 --pos 100,200 --wait
 
 - 开机成功 = `taskStatus=2` 且 `phoneStatus=1`；关机成功 = `phoneStatus=4`；
 - 动作成功 = `taskStatus=2`，失败 = `3`（部分后端也用 `-1`）；
+- RPA 任务成功 = `status=2`，失败 = `3/4`；
 - 超时退出码为 3，任务失败退出码为 1，信封仍输出；
 - `--wait-timeout` 默认 3 分钟，`--poll-interval` 默认 2 秒。
+
+## 诊断
+
+```bash
+pmock-cli doctor
+```
+
+检查配置文件权限、AK/SK 是否存在、base URL 是否合法、一次轻量 API 调用的延迟与 traceId。
+`data.ok=false` 时：缺凭证退出 2，网络/鉴权失败退出 3。
 
 ## MCP Server
 
@@ -206,7 +217,7 @@ pmock-cli phone action click --code A1 --pos-type 2 --pos 100,200 --wait
 ```
 
 - 12 个分组 tool：`pmock_phone`、`pmock_phone_action`、`pmock_phone_file`、`pmock_app`、`pmock_network`、`pmock_rpa_template`、`pmock_rpa_task`、`pmock_product`、`pmock_brand`、`pmock_team`、`pmock_task`、`pmock_account`
-- 62 个 action，覆盖 CLI 的全部可见命令
+- 63 个 action，覆盖 CLI 的全部可见命令
 - `pmock_help` 工具返回任意命令的完整 flag 列表
 - 调用方式：`action` 选动作，`params` 里的 key 就是去掉 `--` 的 flag
 - 嵌套请求体放在 `params.json` 中：
@@ -301,6 +312,36 @@ cmd            ── Cobra 命令树（运行时生成）
 
 ---
 
+## 发布
+
+本地生成跨平台产物（不依赖 GoReleaser）：
+
+```bash
+VERSION=0.1.0 make package
+```
+
+输出在 `dist/`：
+
+```text
+pmock-cli_0.1.0_darwin_arm64.tar.gz
+pmock-cli_0.1.0_darwin_amd64.tar.gz
+pmock-cli_0.1.0_linux_amd64.tar.gz
+pmock-cli_0.1.0_linux_arm64.tar.gz
+pmock-cli_0.1.0_windows_amd64.zip
+checksums.txt
+```
+
+正式发布走 GitHub Actions：
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+[.github/workflows/release.yml](.github/workflows/release.yml) 会调用 GoReleaser 生成同样的产物并创建 GitHub Release。
+
+> npm 平台包与 Homebrew formula 需要先确定正式仓库/module 路径，目前未生成。
+
 ## 开发
 
 ```bash
@@ -316,7 +357,7 @@ make snapshot    # GoReleaser 本地快照（需安装 goreleaser）
 - `auth`：签名固定向量
 - `client`：`httptest` 校验签名头、查询编码、重试、业务错误
 - `spec`：60 个 operation / overlay 覆盖 / 关键命令 flag
-- `cmd`：请求组装、`--json` 合并、必填校验、`--wait`、MCP 工具/参数
+- `cmd`：请求组装、`--json` 合并、必填校验、`--wait`、MCP 工具/参数、doctor
 - `phonefile`：MD5、分片、MinIO/OBS mergeList、断点续传
 - `output`：JSON 转义、表格、中文宽度
 

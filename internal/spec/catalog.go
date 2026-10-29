@@ -203,7 +203,7 @@ func buildCommand(doc *Document, ref OperationRef, ov *CommandOverride) (*Comman
 			risk = Risk(ov.Risk)
 		}
 	}
-	if async != "" && async != "phone" && async != "action" {
+	if async != "" && async != "phone" && async != "action" && async != "rpa" {
 		return nil, fmt.Errorf("invalid async %q", async)
 	}
 	if async == "phone" && operateType == "" {

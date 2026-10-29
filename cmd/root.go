@@ -170,6 +170,7 @@ Use "pmock-cli docs <command>" for the full flag table of any command.`,
 
 	root.AddCommand(newConfigCmd(g))
 	root.AddCommand(newAuthCmd(g))
+	root.AddCommand(newDoctorCmd(g))
 	root.AddCommand(newDocsCmd(catalog))
 	root.AddCommand(newCommandsCmd(catalog))
 	root.AddCommand(newVersionCmd())

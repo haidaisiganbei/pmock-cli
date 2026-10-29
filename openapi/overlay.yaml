@@ -298,5 +298,6 @@ commands:
   - op: POST /open/api/rpa/task/add
     path: [rpa, task, add]
     risk: write
+    async: rpa
     examples:
       - pmock-cli rpa task add --template-id 456 --name daily --json '{"taskList":[{"phoneId":123}]}'

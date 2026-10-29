@@ -329,7 +329,7 @@ func buildMCPTools(catalog *spec.Catalog) []*mcpTool {
 			return byName["pmock_team"]
 		case path[0] == "task":
 			return byName["pmock_task"]
-		case path[0] == "config" || path[0] == "auth":
+		case path[0] == "config" || path[0] == "auth" || path[0] == "doctor":
 			return byName["pmock_account"]
 		}
 		return nil
@@ -365,6 +365,7 @@ func buildMCPTools(catalog *spec.Catalog) []*mcpTool {
 		mcpAction{Name: "config-init", Path: []string{"config", "init"}, Summary: "Save the access key and secret key", Risk: spec.RiskWrite},
 		mcpAction{Name: "config-show", Path: []string{"config", "show"}, Summary: "Show the effective configuration with secrets masked", Risk: spec.RiskRead},
 		mcpAction{Name: "auth-status", Path: []string{"auth", "status"}, Summary: "Verify credentials with a lightweight API call", Risk: spec.RiskRead},
+		mcpAction{Name: "doctor", Path: []string{"doctor"}, Summary: "Diagnose config, credentials and API connectivity", Risk: spec.RiskRead},
 	)
 
 	for _, t := range tools {
