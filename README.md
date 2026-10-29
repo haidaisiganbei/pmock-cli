@@ -29,7 +29,9 @@ CI、服务器和第三方开发者机器上。
 | `phone file upload` 一体化上传（MD5 → 分片 → 合并推送） | ✅ |
 | `--wait` 异步任务轮询（开关机 / UI 动作） | ✅ |
 | `pmock-cli mcp`（12 个分组 tool / 63 个 action） | ✅ |
-| Skills 文档生成 / npm / Homebrew / Release | ⏳ P3 |
+| GoReleaser / GitHub Release / 本地打包 | ✅ |
+| npm 平台包 / Homebrew / Skills 文档 | npm 打包 ✅，发布 ⏳ |
+
 
 ---
 
@@ -340,7 +342,16 @@ git push origin v0.1.0
 
 [.github/workflows/release.yml](.github/workflows/release.yml) 会调用 GoReleaser 生成同样的产物并创建 GitHub Release。
 
-> npm 平台包与 Homebrew formula 需要先确定正式仓库/module 路径，目前未生成。
+npm 包（平台包 + wrapper）：
+
+```bash
+VERSION=0.1.0 NPM_SCOPE=@pmock make npm
+```
+
+产物在 `npm/build/`。`NPM_SCOPE` 目前是占位，正式 npm org 确定后替换；
+运行时也可用 `PMOCK_CLI_NPM_SCOPE` 覆盖 scope。
+
+> Homebrew formula 需要正式仓库 URL 与 release checksum，仓库地址确认后生成。
 
 ## 开发
 
@@ -387,4 +398,4 @@ pmock-cli phone list --page-size 1
 - **P1**：批量封装（批量开关机/安装）、按名称或 code 唯一匹配、字段级 `--json` schema 提示、
   真实 AK/SK 只读冒烟
 - **P2**：RPA 任务的 add/update/retry 高层封装、文件下载、推流地址、远程连接
-- **P3**：Skills 文档生成、GoReleaser + npm wrapper + Homebrew + Docker
+- **P3**：Skills 文档生成、Homebrew formula、Docker 镜像、正式 npm 发布

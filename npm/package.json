@@ -1,0 +1,20 @@
+{
+  "name": "pmock-cli",
+  "version": "0.0.0",
+  "description": "PMOCK open API command line client",
+  "license": "Apache-2.0",
+  "bin": {
+    "pmock-cli": "bin/pmock-cli.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pmock/pmock-cli.git"
+  },
+  "optionalDependencies": {},
+  "files": [
+    "bin/"
+  ]
+}

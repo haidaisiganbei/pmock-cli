@@ -32,6 +32,22 @@ jobs:
       - name: build
         run: go build -trimpath ./...
 
+  npm-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: build npm packages
+        run: VERSION=0.1.0 NPM_SCOPE=@pmock ./scripts/build-npm.sh
+      - name: verify wrapper tarball
+        run: test -s npm/build/pmock-cli-0.1.0.tgz
+
   cross-build:
     runs-on: ubuntu-latest
     strategy:

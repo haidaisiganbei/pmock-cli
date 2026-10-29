@@ -9,7 +9,7 @@ LDFLAGS := -s -w \
 	-X $(MODULE)/internal/build.Date=$(DATE)
 PREFIX  ?= /usr/local
 
-.PHONY: build test vet fmt check install clean snapshot run update-spec package
+.PHONY: build test vet fmt check install clean snapshot run update-spec package npm
 
 build:
 	go build -trimpath -ldflags "$(LDFLAGS)" -o bin/$(BINARY) .
@@ -41,6 +41,9 @@ update-spec:
 
 package:
 	./scripts/package.sh
+
+npm:
+	VERSION=$${VERSION:-0.1.0} NPM_SCOPE=$${NPM_SCOPE:-@pmock} ./scripts/build-npm.sh
 
 clean:
 	rm -rf bin dist
