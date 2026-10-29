@@ -13,7 +13,7 @@ VERSION="${VERSION:?set VERSION, e.g. VERSION=0.1.0}"
 DIST="${DIST:-dist}"
 OUT="${OUT:-npm/build}"
 
-if [ ! -d "$DIST" ]; then
+if [ ! -f "${DIST}/pmock-cli_${VERSION}_darwin_arm64.tar.gz" ]; then
   VERSION="$VERSION" ./scripts/package.sh
 fi
 
