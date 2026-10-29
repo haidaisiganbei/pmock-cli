@@ -43,6 +43,18 @@ CI、服务器和第三方开发者机器上。
 
 ## 安装
 
+预编译二进制（macOS / Linux / Windows）：
+
+```bash
+# 以 v0.1.0 darwin-arm64 为例
+curl -L -o pmock-cli.tar.gz \
+  https://github.com/haidaisiganbei/pmock-cli/releases/download/v0.1.0/pmock-cli_0.1.0_darwin_arm64.tar.gz
+tar -xzf pmock-cli.tar.gz
+./pmock-cli --version
+```
+
+完整产物见 [Releases](https://github.com/haidaisiganbei/pmock-cli/releases)。
+
 从源码：
 
 ```bash
