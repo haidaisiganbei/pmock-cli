@@ -29,8 +29,9 @@ CI、服务器和第三方开发者机器上。
 | `phone file upload` 一体化上传（MD5 → 分片 → 合并推送） | ✅ |
 | `--wait` 异步任务轮询（开关机 / UI 动作） | ✅ |
 | `pmock-cli mcp`（12 个分组 tool / 63 个 action） | ✅ |
-| GoReleaser / GitHub Release / 本地打包 | ✅ |
-| npm 平台包 / Homebrew / Skills 文档 | npm 打包 ✅，发布 ⏳ |
+| GoReleaser / Release workflow / 本地打包 | ✅ |
+| npm 平台包（构建 + 本地安装验证） | ✅ |
+| Homebrew / Skills 文档 / 正式发布 | 后续增强，需仓库与 npm org |
 
 
 ---
