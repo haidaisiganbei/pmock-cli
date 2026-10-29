@@ -5,6 +5,7 @@
 package output
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -27,6 +28,7 @@ func Render(w io.Writer, env *client.Envelope, opts Options) error {
 	if env == nil {
 		return fmt.Errorf("empty response")
 	}
+	env = normalize(env)
 	switch opts.Format {
 	case "", "json":
 		return renderJSON(w, env, opts.Compact)
@@ -37,6 +39,76 @@ func Render(w io.Writer, env *client.Envelope, opts Options) error {
 	default:
 		return fmt.Errorf("unknown format %q (want json, pretty, table)", opts.Format)
 	}
+}
+
+// normalize folds a top-level pagination payload (total/rows) into data and
+// masks credential-like fields before anything reaches stdout.
+func normalize(env *client.Envelope) *client.Envelope {
+	out := *env
+	data := env.Data
+	if (len(data) == 0 || string(data) == "null") && len(env.Rows) > 0 {
+		var rows any
+		if json.Unmarshal(env.Rows, &rows) == nil {
+			obj := map[string]any{"rows": rows}
+			if len(env.Total) > 0 {
+				var total any
+				if json.Unmarshal(env.Total, &total) == nil {
+					obj["total"] = total
+				}
+			}
+			if b, err := marshalNoEscape(obj); err == nil {
+				data = b
+			}
+		}
+	}
+	if len(data) > 0 && string(data) != "null" {
+		var v any
+		if json.Unmarshal(data, &v) == nil {
+			if b, err := marshalNoEscape(redact(v)); err == nil {
+				data = b
+			}
+		}
+	}
+	out.Data = data
+	return &out
+}
+
+// redact walks a decoded JSON value and masks secret-bearing keys in place.
+func redact(v any) any {
+	switch t := v.(type) {
+	case map[string]any:
+		for k, val := range t {
+			if sensitiveKey(k) {
+				t[k] = "****"
+				continue
+			}
+			t[k] = redact(val)
+		}
+	case []any:
+		for i := range t {
+			t[i] = redact(t[i])
+		}
+	}
+	return v
+}
+
+func marshalNoEscape(v any) ([]byte, error) {
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+	if err := enc.Encode(v); err != nil {
+		return nil, err
+	}
+	return bytes.TrimRight(buf.Bytes(), "\n"), nil
+}
+
+func sensitiveKey(k string) bool {
+	switch strings.ToLower(k) {
+	case "password", "adbpassword", "token", "accesstoken", "refreshtoken",
+		"secret", "secretkey", "accesskey", "authorization", "cookie":
+		return true
+	}
+	return false
 }
 
 type envelopeJSON struct {

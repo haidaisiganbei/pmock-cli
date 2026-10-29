@@ -305,6 +305,15 @@ pmock-cli rpa task add --template-id 9 --name daily --json @task.json --dry-run
 
 `code = 0` 和 `code = 200` 都表示成功（测试环境返回 200）；其他 code 为失败。
 
+分页接口（`phone/list`、`app/list`、`rpa/task/list` 等）后端把 `total`/`rows`
+放在顶层，CLI 统一折叠为：
+
+```json
+{ "data": { "total": 6, "rows": [ ... ] } }
+```
+
+`password`、`adbPassword`、`accessKey`、`token` 等字段在输出前自动替换为 `****`。
+
 `--format`：
 
 - `json`（默认）：原样信封，可 `| jq`

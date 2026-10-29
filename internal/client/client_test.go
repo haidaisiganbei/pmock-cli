@@ -186,3 +186,19 @@ func TestSuccessCode200(t *testing.T) {
 		t.Fatalf("envelope = %+v", env)
 	}
 }
+
+func TestPaginatedTopLevelRows(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"traceId":"page","code":200,"msg":"查询成功","total":2,"rows":[{"id":"1"},{"id":"2"}]}`))
+	}))
+	defer srv.Close()
+
+	c := New(srv.URL, testAK, testSK, time.Second)
+	env, err := c.Do(context.Background(), Request{Method: "GET", Path: "/open/api/phone/list"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !env.OK() || len(env.Rows) == 0 || len(env.Total) == 0 {
+		t.Fatalf("envelope = %+v", env)
+	}
+}

@@ -73,3 +73,42 @@ func TestRenderPrettyFailure(t *testing.T) {
 		t.Fatalf("unexpected pretty output:\n%s", got)
 	}
 }
+
+func TestRenderPaginatedRowsAndRedaction(t *testing.T) {
+	e := &client.Envelope{
+		TraceID: "page-1",
+		Code:    200,
+		Msg:     "查询成功",
+		Total:   json.RawMessage(`2`),
+		Rows: json.RawMessage(`[
+			{"id":"1","name":"a","networkResVO":{"password":"secret","account":"user"}},
+			{"id":"2","name":"b","adbPassword":"adbs"}
+		]`),
+	}
+	var buf bytes.Buffer
+	if err := Render(&buf, e, Options{Format: "json"}); err != nil {
+		t.Fatal(err)
+	}
+	got := buf.String()
+	if strings.Contains(got, "secret") || strings.Contains(got, "adbs") {
+		t.Fatalf("secret leaked:\n%s", got)
+	}
+	var out struct {
+		Data struct {
+			Total int              `json:"total"`
+			Rows  []map[string]any `json:"rows"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(buf.Bytes(), &out); err != nil {
+		t.Fatal(err)
+	}
+	if out.Data.Total != 2 || len(out.Data.Rows) != 2 {
+		t.Fatalf("data = %+v", out.Data)
+	}
+	if out.Data.Rows[0]["networkResVO"].(map[string]any)["password"] != "****" {
+		t.Fatalf("password not masked: %#v", out.Data.Rows[0])
+	}
+	if out.Data.Rows[1]["adbPassword"] != "****" {
+		t.Fatalf("adbPassword not masked: %#v", out.Data.Rows[1])
+	}
+}

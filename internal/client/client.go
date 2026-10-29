@@ -30,6 +30,12 @@ type Envelope struct {
 	Msg     string          `json:"msg"`
 	Data    json.RawMessage `json:"data"`
 	Status  string          `json:"status"`
+
+	// Paginated endpoints (phone/list, app/list, network/list, ...) put the
+	// page at the top level as {total, rows} instead of inside data. Keep both
+	// so the output layer can normalize them without losing the list.
+	Total json.RawMessage `json:"total,omitempty"`
+	Rows  json.RawMessage `json:"rows,omitempty"`
 }
 
 // OK reports whether the business code indicates success. The public API
