@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pmock/pmock-cli/internal/build"
-	"github.com/pmock/pmock-cli/internal/exitcode"
-	"github.com/pmock/pmock-cli/internal/spec"
+	"github.com/haidaisiganbei/pmock-cli/internal/build"
+	"github.com/haidaisiganbei/pmock-cli/internal/exitcode"
+	"github.com/haidaisiganbei/pmock-cli/internal/spec"
 )
 
 func newDocsCmd(catalog *spec.Catalog) *cobra.Command {

@@ -7,14 +7,13 @@ const path = require("node:path");
 
 const platform = process.platform;
 const arch = process.arch;
-const scope = process.env.PMOCK_CLI_NPM_SCOPE || "@pmock";
 
 const override = process.env.PMOCK_CLI_BIN;
 if (override) {
   run(override);
 }
 
-const pkg = `${scope}/cli-${platform}-${arch}`;
+const pkg = `pmock-cli-${platform}-${arch}`;
 let pkgDir;
 try {
   pkgDir = path.dirname(require.resolve(`${pkg}/package.json`));

@@ -41,7 +41,7 @@ CI、服务器和第三方开发者机器上。
 从源码：
 
 ```bash
-git clone <repo-url> pmock-cli
+git clone https://github.com/haidaisiganbei/pmock-cli.git
 cd pmock-cli
 make build
 ./bin/pmock-cli --version
@@ -50,11 +50,8 @@ make build
 或：
 
 ```bash
-go install github.com/pmock/pmock-cli@latest
+go install github.com/haidaisiganbei/pmock-cli@latest
 ```
-
-> `module` 路径目前是占位值 `github.com/pmock/pmock-cli`，确定正式仓库后修改
-> `go.mod`、`Makefile` 与 `.goreleaser.yaml` 中的模块路径即可。
 
 ---
 
@@ -346,11 +343,12 @@ git push origin v0.1.0
 npm 包（平台包 + wrapper）：
 
 ```bash
-VERSION=0.1.0 NPM_SCOPE=@pmock make npm
+VERSION=0.1.0 make npm
 ```
 
-产物在 `npm/build/`。`NPM_SCOPE` 目前是占位，正式 npm org 确定后替换；
-运行时也可用 `PMOCK_CLI_NPM_SCOPE` 覆盖 scope。
+产物在 `npm/build/`，包含 `pmock-cli` wrapper 和 5 个平台包：
+`pmock-cli-darwin-arm64`、`pmock-cli-darwin-x64`、`pmock-cli-linux-x64`、
+`pmock-cli-linux-arm64`、`pmock-cli-win32-x64`。
 
 > Homebrew formula 需要正式仓库 URL 与 release checksum，仓库地址确认后生成。
 

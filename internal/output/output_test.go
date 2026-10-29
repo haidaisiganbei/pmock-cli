@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pmock/pmock-cli/internal/client"
+	"github.com/haidaisiganbei/pmock-cli/internal/client"
 )
 
 func env(data string) *client.Envelope {

@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pmock/pmock-cli/internal/auth"
+	"github.com/haidaisiganbei/pmock-cli/internal/auth"
 )
 
 const testAK = "AKID"

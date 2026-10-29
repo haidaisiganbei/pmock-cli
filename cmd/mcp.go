@@ -20,9 +20,9 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/spf13/cobra"
 
-	"github.com/pmock/pmock-cli/internal/build"
-	"github.com/pmock/pmock-cli/internal/config"
-	"github.com/pmock/pmock-cli/internal/spec"
+	"github.com/haidaisiganbei/pmock-cli/internal/build"
+	"github.com/haidaisiganbei/pmock-cli/internal/config"
+	"github.com/haidaisiganbei/pmock-cli/internal/spec"
 )
 
 const mcpInstructions = "PMOCK cloud phone management via pmock-cli. " +

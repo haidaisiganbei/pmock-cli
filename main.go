@@ -5,7 +5,7 @@ import (
 	"embed"
 	"os"
 
-	"github.com/pmock/pmock-cli/cmd"
+	"github.com/haidaisiganbei/pmock-cli/cmd"
 )
 
 // openapi carries the vendored spec and the product overlay. Embedding keeps

@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/pmock/pmock-cli/internal/exitcode"
+	"github.com/haidaisiganbei/pmock-cli/internal/exitcode"
 )
 
 func decodeResult(t *testing.T, buf *bytes.Buffer) map[string]any {

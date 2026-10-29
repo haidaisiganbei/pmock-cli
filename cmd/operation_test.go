@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pmock/pmock-cli/internal/exitcode"
-	"github.com/pmock/pmock-cli/internal/spec"
+	"github.com/haidaisiganbei/pmock-cli/internal/exitcode"
+	"github.com/haidaisiganbei/pmock-cli/internal/spec"
 )
 
 func testCatalog(t *testing.T) *spec.Catalog {

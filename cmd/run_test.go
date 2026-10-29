@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pmock/pmock-cli/internal/exitcode"
+	"github.com/haidaisiganbei/pmock-cli/internal/exitcode"
 )
 
 func testGlobals(base string) *globals {

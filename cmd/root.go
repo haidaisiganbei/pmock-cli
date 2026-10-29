@@ -12,10 +12,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pmock/pmock-cli/internal/build"
-	"github.com/pmock/pmock-cli/internal/config"
-	"github.com/pmock/pmock-cli/internal/exitcode"
-	"github.com/pmock/pmock-cli/internal/spec"
+	"github.com/haidaisiganbei/pmock-cli/internal/build"
+	"github.com/haidaisiganbei/pmock-cli/internal/config"
+	"github.com/haidaisiganbei/pmock-cli/internal/exitcode"
+	"github.com/haidaisiganbei/pmock-cli/internal/spec"
 )
 
 // globals are the persistent flags shared by every command.

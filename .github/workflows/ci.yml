@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: "20"
       - name: build npm packages
-        run: VERSION=0.1.0 NPM_SCOPE=@pmock ./scripts/build-npm.sh
+        run: VERSION=0.1.0 ./scripts/build-npm.sh
       - name: verify wrapper tarball
         run: test -s npm/build/pmock-cli-0.1.0.tgz
 

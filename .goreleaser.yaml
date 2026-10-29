@@ -24,9 +24,9 @@ builds:
         goarch: arm64
     ldflags:
       - -s -w
-      - -X github.com/pmock/pmock-cli/internal/build.Version={{.Version}}
-      - -X github.com/pmock/pmock-cli/internal/build.Commit={{.Commit}}
-      - -X github.com/pmock/pmock-cli/internal/build.Date={{.Date}}
+      - -X github.com/haidaisiganbei/pmock-cli/internal/build.Version={{.Version}}
+      - -X github.com/haidaisiganbei/pmock-cli/internal/build.Commit={{.Commit}}
+      - -X github.com/haidaisiganbei/pmock-cli/internal/build.Date={{.Date}}
 
 archives:
   - formats: [tar.gz]

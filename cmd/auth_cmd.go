@@ -9,11 +9,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pmock/pmock-cli/internal/build"
-	"github.com/pmock/pmock-cli/internal/client"
-	"github.com/pmock/pmock-cli/internal/config"
-	"github.com/pmock/pmock-cli/internal/exitcode"
-	"github.com/pmock/pmock-cli/internal/output"
+	"github.com/haidaisiganbei/pmock-cli/internal/build"
+	"github.com/haidaisiganbei/pmock-cli/internal/client"
+	"github.com/haidaisiganbei/pmock-cli/internal/config"
+	"github.com/haidaisiganbei/pmock-cli/internal/exitcode"
+	"github.com/haidaisiganbei/pmock-cli/internal/output"
 )
 
 func newAuthCmd(g *globals) *cobra.Command {

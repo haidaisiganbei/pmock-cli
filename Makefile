@@ -1,5 +1,5 @@
 BINARY  := pmock-cli
-MODULE  := github.com/pmock/pmock-cli
+MODULE  := github.com/haidaisiganbei/pmock-cli
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 COMMIT  ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo none)
 DATE    ?= $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -43,7 +43,7 @@ package:
 	./scripts/package.sh
 
 npm:
-	VERSION=$${VERSION:-0.1.0} NPM_SCOPE=$${NPM_SCOPE:-@pmock} ./scripts/build-npm.sh
+	VERSION=$${VERSION:-0.1.0} ./scripts/build-npm.sh
 
 clean:
 	rm -rf bin dist

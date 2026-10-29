@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 # Build npm platform packages from dist/ and pack the wrapper.
 #
-#   VERSION=0.1.0 NPM_SCOPE=@pmock ./scripts/build-npm.sh
+#   VERSION=0.1.0 ./scripts/build-npm.sh
 #
-# The scope is a placeholder until the real npm org is known. The wrapper
-# resolves `${NPM_SCOPE}/cli-<platform>-<arch>` at runtime; PMOCK_CLI_NPM_SCOPE
-# can override the scope without republishing.
+# The wrapper resolves "pmock-cli-<platform>-<arch>" at runtime. All package
+# names are unscoped so they can be published from a personal npm account.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
 VERSION="${VERSION:?set VERSION, e.g. VERSION=0.1.0}"
-NPM_SCOPE="${NPM_SCOPE:-@pmock}"
 DIST="${DIST:-dist}"
 OUT="${OUT:-npm/build}"
 
@@ -46,6 +44,7 @@ for target in "${targets[@]}"; do
     arm64) npm_arch="arm64" ;;
   esac
 
+  pkg_name="pmock-cli-${npm_os}-${npm_arch}"
   pkg_dir="$OUT/${npm_os}-${npm_arch}"
   mkdir -p "$pkg_dir"
 
@@ -61,7 +60,7 @@ for target in "${targets[@]}"; do
 
   cat >"$pkg_dir/package.json" <<JSON
 {
-  "name": "${NPM_SCOPE}/cli-${npm_os}-${npm_arch}",
+  "name": "${pkg_name}",
   "version": "${VERSION}",
   "description": "PMOCK CLI binary for ${npm_os}-${npm_arch}",
   "license": "Apache-2.0",
@@ -72,19 +71,18 @@ for target in "${targets[@]}"; do
 JSON
 
   (cd "$pkg_dir" && npm pack --silent --pack-destination "$OUT_ABS" >/dev/null)
-  echo "packed ${NPM_SCOPE}/cli-${npm_os}-${npm_arch}@${VERSION}"
+  echo "packed ${pkg_name}@${VERSION}"
 done
 
 # Update the wrapper version and optionalDependencies, then pack it.
-node - "$VERSION" "$NPM_SCOPE" <<'NODE'
+node - "$VERSION" <<'NODE'
 const fs = require("node:fs");
 const version = process.argv[2];
-const scope = process.argv[3];
 const pkg = JSON.parse(fs.readFileSync("npm/package.json", "utf8"));
 pkg.version = version;
 pkg.optionalDependencies = {};
 for (const key of ["darwin-arm64", "darwin-x64", "linux-x64", "linux-arm64", "win32-x64"]) {
-  pkg.optionalDependencies[`${scope}/cli-${key}`] = version;
+  pkg.optionalDependencies[`pmock-cli-${key}`] = version;
 }
 fs.writeFileSync("npm/package.json", JSON.stringify(pkg, null, 2) + "\n");
 NODE

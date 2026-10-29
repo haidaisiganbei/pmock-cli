@@ -13,7 +13,7 @@ VERSION="${VERSION:-$(git describe --tags --always --dirty 2>/dev/null || echo d
 COMMIT="${COMMIT:-$(git rev-parse --short HEAD 2>/dev/null || echo none)}"
 DATE="${DATE:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 OUT="${OUT:-dist}"
-MODULE="github.com/pmock/pmock-cli"
+MODULE="github.com/haidaisiganbei/pmock-cli"
 
 rm -rf "$OUT"
 mkdir -p "$OUT"

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pmock/pmock-cli/internal/exitcode"
+	"github.com/haidaisiganbei/pmock-cli/internal/exitcode"
 )
 
 func runDoctor(t *testing.T, g *globals) (string, error) {
