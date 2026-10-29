@@ -1,3 +1,8 @@
+[![CI](https://github.com/haidaisiganbei/pmock-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/haidaisiganbei/pmock-cli/actions/workflows/ci.yml)
+[![Release](https://github.com/haidaisiganbei/pmock-cli/actions/workflows/release.yml/badge.svg)](https://github.com/haidaisiganbei/pmock-cli/actions/workflows/release.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/haidaisiganbei/pmock-cli.svg)](https://pkg.go.dev/github.com/haidaisiganbei/pmock-cli)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 # pmock-cli
 
 PMOCK 开放 API 的独立命令行客户端。用团队 **Access Key / Secret Key** 直接调用
