@@ -47,16 +47,16 @@ CI、服务器和第三方开发者机器上。
 预编译二进制（macOS / Linux / Windows）：
 
 ```bash
-# 以 v0.1.1 darwin-arm64 为例
+# 以 v0.1.2 darwin-arm64 为例
 curl -L -o pmock-cli.tar.gz \
-  https://github.com/haidaisiganbei/pmock-cli/releases/download/v0.1.1/pmock-cli_0.1.1_darwin_arm64.tar.gz
+  https://github.com/haidaisiganbei/pmock-cli/releases/download/v0.1.2/pmock-cli_0.1.2_darwin_arm64.tar.gz
 tar -xzf pmock-cli.tar.gz
 ./pmock-cli --version
 ```
 
 完整产物见 [Releases](https://github.com/haidaisiganbei/pmock-cli/releases)。
 
-Homebrew（本地 formula，v0.1.1 已带 checksum）：
+Homebrew（本地 formula，v0.1.2 已带 checksum）：
 
 ```bash
 brew install --formula ./Formula/pmock-cli.rb
