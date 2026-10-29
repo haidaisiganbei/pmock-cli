@@ -1,0 +1,41 @@
+name: npm
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version without the leading v (e.g. 0.1.1)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.event.release.tag_name || inputs.version }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - name: build packages
+        run: VERSION="${VERSION#v}" make npm
+      - name: publish platform packages
+        run: |
+          for f in npm/build/pmock-cli-darwin-*.tgz \
+                   npm/build/pmock-cli-linux-*.tgz \
+                   npm/build/pmock-cli-win32-*.tgz; do
+            npm publish "$f" --access public
+          done
+      - name: publish wrapper
+        run: npm publish "npm/build/pmock-cli-${VERSION#v}.tgz" --access public

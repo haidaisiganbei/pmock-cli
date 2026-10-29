@@ -370,6 +370,10 @@ npm 包（平台包 + wrapper）：
 VERSION=0.1.0 make npm
 ```
 
+发布前在仓库 Secrets 中配置 `NPM_TOKEN`；发布 GitHub Release 时
+[.github/workflows/npm.yml](.github/workflows/npm.yml) 会自动构建并发布 npm 包。
+也可以本地手动发布。
+
 产物在 `npm/build/`，包含 `pmock-cli` wrapper 和 5 个平台包：
 `pmock-cli-darwin-arm64`、`pmock-cli-darwin-x64`、`pmock-cli-linux-x64`、
 `pmock-cli-linux-arm64`、`pmock-cli-win32-x64`。
