@@ -36,7 +36,8 @@ CI、服务器和第三方开发者机器上。
 | `pmock-cli mcp`（12 个分组 tool / 63 个 action） | ✅ |
 | GoReleaser / Release workflow / 本地打包 | ✅ |
 | npm 平台包（构建 + 本地安装验证） | ✅ |
-| Homebrew / Skills 文档 / 正式发布 | 后续增强，需仓库与 npm org |
+| Homebrew formula | ✅ |
+| npm 正式发布 / Skills 文档 | 需 npm 登录；Skills 为后续增强 |
 
 
 ---
@@ -54,6 +55,12 @@ tar -xzf pmock-cli.tar.gz
 ```
 
 完整产物见 [Releases](https://github.com/haidaisiganbei/pmock-cli/releases)。
+
+Homebrew（本地 formula，v0.1.1 已带 checksum）：
+
+```bash
+brew install --formula ./Formula/pmock-cli.rb
+```
 
 从源码：
 
