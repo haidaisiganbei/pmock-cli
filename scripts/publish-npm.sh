@@ -46,14 +46,18 @@ done
 
 publish_one "pmock-cli" "$DIR/pmock-cli-${VERSION}.tgz"
 
-if npm view "pmock-cli@${VERSION}" version --registry "$REGISTRY" >/dev/null 2>&1; then
-  echo
-  echo "wrapper available: npm install -g pmock-cli@${VERSION}"
-  if [ "$failures" -gt 0 ]; then
-    echo "note: $failures platform package(s) still need attention; wrapper installs only matching platforms." >&2
+# npm may take a few seconds to make a newly published version visible.
+for _ in $(seq 1 20); do
+  if npm view "pmock-cli@${VERSION}" version --registry "$REGISTRY" >/dev/null 2>&1; then
+    echo
+    echo "wrapper available: npm install -g pmock-cli@${VERSION}"
+    if [ "$failures" -gt 0 ]; then
+      echo "note: $failures platform package(s) still need attention; wrapper installs only matching platforms." >&2
+    fi
+    exit 0
   fi
-  exit 0
-fi
+  sleep 3
+done
 
 echo "wrapper was not published" >&2
 exit 1
