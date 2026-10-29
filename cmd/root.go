@@ -110,6 +110,13 @@ func Execute(assets fs.FS) int {
 }
 
 func newRoot(catalog *spec.Catalog) *cobra.Command {
+	return newRootWith(catalog, true)
+}
+
+// newRootWith builds the command tree. includeMCP is false while the MCP
+// server executes a tool, otherwise `pmock-cli mcp` would be registered inside
+// every tool invocation.
+func newRootWith(catalog *spec.Catalog, includeMCP bool) *cobra.Command {
 	g := &globals{}
 
 	root := &cobra.Command{
@@ -169,6 +176,9 @@ Use "pmock-cli docs <command>" for the full flag table of any command.`,
 
 	addCatalog(root, catalog, g)
 	addExtraCommands(root, g)
+	if includeMCP {
+		root.AddCommand(newMCPCmd(catalog))
+	}
 	return root
 }
 

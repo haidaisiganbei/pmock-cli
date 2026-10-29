@@ -7,7 +7,7 @@ CI、服务器和第三方开发者机器上。
 > 与随客户端安装的 `pmock` 命令区分：`pmock` 走本机 MCP / 登录态，只服务本机；
 > `pmock-cli` 走开放 API + AK/SK，是可独立分发的二进制。
 
-- 语言：Go 1.24+
+- 语言：Go 1.25+
 - 命令框架：Cobra
 - API 规范：[pmock-openapi.yaml](openapi/pmock-openapi.yaml)（60 个 operation，129 个 schema）
 - 许可：Apache-2.0
@@ -28,8 +28,8 @@ CI、服务器和第三方开发者机器上。
 | `--json` 嵌套请求体 | ✅ |
 | `phone file upload` 一体化上传（MD5 → 分片 → 合并推送） | ✅ |
 | `--wait` 异步任务轮询（开关机 / UI 动作） | ✅ |
-| MCP Server / Skills | ⏳ P3 |
-| npm / Homebrew / GoReleaser 发布 | ⏳ P3 |
+| `pmock-cli mcp`（12 个分组 tool / 62 个 action） | ✅ |
+| Skills 文档生成 / npm / Homebrew / Release | ⏳ P3 |
 
 ---
 
@@ -186,6 +186,36 @@ pmock-cli phone action click --code A1 --pos-type 2 --pos 100,200 --wait
 - 超时退出码为 3，任务失败退出码为 1，信封仍输出；
 - `--wait-timeout` 默认 3 分钟，`--poll-interval` 默认 2 秒。
 
+## MCP Server
+
+`pmock-cli mcp` 以 stdio 方式启动 MCP Server，复用同一份命令目录：
+
+```json
+{
+  "mcpServers": {
+    "pmock": {
+      "command": "pmock-cli",
+      "args": ["mcp"],
+      "env": {
+        "PMOCK_ACCESS_KEY": "AK...",
+        "PMOCK_SECRET_KEY": "SK..."
+      }
+    }
+  }
+}
+```
+
+- 12 个分组 tool：`pmock_phone`、`pmock_phone_action`、`pmock_phone_file`、`pmock_app`、`pmock_network`、`pmock_rpa_template`、`pmock_rpa_task`、`pmock_product`、`pmock_brand`、`pmock_team`、`pmock_task`、`pmock_account`
+- 62 个 action，覆盖 CLI 的全部可见命令
+- `pmock_help` 工具返回任意命令的完整 flag 列表
+- 调用方式：`action` 选动作，`params` 里的 key 就是去掉 `--` 的 flag
+- 嵌套请求体放在 `params.json` 中：
+  ```json
+  { "action": "add", "params": { "template-id": 9, "name": "daily", "json": { "taskList": [{ "phoneId": 123 }] } } }
+  ```
+- 破坏性 action 需要 `params.yes = true`；失败结果带 `isError` 并附命令帮助
+- MCP 与 CLI 共用同一 `spec.Catalog`，不会出现 geelark-cli 那种“CLI 有、MCP 没有”的漂移
+
 ## 复杂请求体
 
 标量字段都有独立 flag；嵌套对象 / 对象数组用 `--json`，flag 会覆盖 JSON 中的同名 key：
@@ -260,7 +290,7 @@ cmd            ── Cobra 命令树（运行时生成）
 
 为什么不照抄 geelark-cli 的“一命令一文件”：
 
-1. **不会漂移**：命令树、参数、help、将来的 MCP action 都来自同一份 spec；
+1. **不会漂移**：命令树、参数、help、MCP action 都来自同一份 spec；
    `internal/spec/catalog_test.go` 强制 60 个 operation 与 overlay 一一对应。
 2. **新增接口只改两处**：spec 更新 + overlay 加一条映射，`go test` 会提示漏项。
 3. **没有 2,700 行复制粘贴**：请求编码、类型转换、必填校验只有一份实现。
@@ -286,7 +316,8 @@ make snapshot    # GoReleaser 本地快照（需安装 goreleaser）
 - `auth`：签名固定向量
 - `client`：`httptest` 校验签名头、查询编码、重试、业务错误
 - `spec`：60 个 operation / overlay 覆盖 / 关键命令 flag
-- `cmd`：请求组装、`--json` 合并、必填校验
+- `cmd`：请求组装、`--json` 合并、必填校验、`--wait`、MCP 工具/参数
+- `phonefile`：MD5、分片、MinIO/OBS mergeList、断点续传
 - `output`：JSON 转义、表格、中文宽度
 
 真实 API 冒烟（需要有效 AK/SK，建议只读）：
@@ -315,5 +346,4 @@ pmock-cli phone list --page-size 1
 - **P1**：批量封装（批量开关机/安装）、按名称或 code 唯一匹配、字段级 `--json` schema 提示、
   真实 AK/SK 只读冒烟
 - **P2**：RPA 任务的 add/update/retry 高层封装、文件下载、推流地址、远程连接
-- **P3**：`pmock-cli mcp`（复用同一 catalog 生成 action）、Skills 文档生成、
-  GoReleaser + npm wrapper + Homebrew + Docker
+- **P3**：Skills 文档生成、GoReleaser + npm wrapper + Homebrew + Docker

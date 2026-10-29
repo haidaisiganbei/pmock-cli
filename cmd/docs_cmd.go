@@ -37,6 +37,11 @@ text, unlike the JSON envelope used by API commands.`,
 				printUploadDoc(out)
 				return nil
 			}
+			if path == "mcp" {
+				c := newMCPCmd(catalog)
+				fmt.Fprintf(out, "pmock-cli mcp\n\n%s\n\nFLAGS\n%s", c.Long, c.Flags().FlagUsages())
+				return nil
+			}
 			var match *spec.Command
 			for _, c := range catalog.Commands {
 				if c.FullPath() == path {
