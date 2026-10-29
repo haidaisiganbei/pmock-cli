@@ -147,6 +147,12 @@ func printUploadPlan(cmd *cobra.Command, plan *phonefile.Plan) error {
 // OpenAPI operation. They still appear in `pmock-cli commands`.
 func extraCommandInfos() []commandInfo {
 	return []commandInfo{{
+		Path:     "doctor",
+		Method:   "GET",
+		HTTPPath: "/open/api/phone/list?pageNum=1&pageSize=1",
+		Summary:  "Diagnose config, credentials and API connectivity",
+		Risk:     "read",
+	}, {
 		Path:     "phone file upload",
 		Method:   "POST",
 		HTTPPath: "/open/api/phone/minio/init/task -> /open/api/phone/completeAndPush",
