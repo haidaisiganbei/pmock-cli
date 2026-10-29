@@ -44,6 +44,21 @@ CI、服务器和第三方开发者机器上。
 
 ## 安装
 
+一键安装（macOS / Linux，无需 npm）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/haidaisiganbei/pmock-cli/main/scripts/install.sh | sh
+```
+
+npm（发布到 registry 后）：
+
+```bash
+npm install -g pmock-cli@latest
+```
+
+> npm 包已构建完成，但当前 npm 账号尚未发布；先使用上面的 install.sh，
+> 或在 `npm login` 后执行 `VERSION=0.1.2 make npm` + `npm publish`。
+
 预编译二进制（macOS / Linux / Windows）：
 
 ```bash
