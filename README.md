@@ -267,7 +267,7 @@ pmock-cli doctor
   { "action": "add", "params": { "template-id": 9, "name": "daily", "json": { "taskList": [{ "phoneId": 123 }] } } }
   ```
 - 破坏性 action 需要 `params.yes = true`；失败结果带 `isError` 并附命令帮助
-- MCP 与 CLI 共用同一 `spec.Catalog`，不会出现 geelark-cli 那种“CLI 有、MCP 没有”的漂移
+- MCP 与 CLI 共用同一 `spec.Catalog`，命令与 action 不会出现漂移
 
 ## 复杂请求体
 
@@ -352,12 +352,12 @@ internal/client ── AK/SK 签名、重试、信封解析
 cmd            ── Cobra 命令树（运行时生成）
 ```
 
-为什么不照抄 geelark-cli 的“一命令一文件”：
+为什么采用 spec 驱动，而不是一命令一文件：
 
 1. **不会漂移**：命令树、参数、help、MCP action 都来自同一份 spec；
    `internal/spec/catalog_test.go` 强制 60 个 operation 与 overlay 一一对应。
 2. **新增接口只改两处**：spec 更新 + overlay 加一条映射，`go test` 会提示漏项。
-3. **没有 2,700 行复制粘贴**：请求编码、类型转换、必填校验只有一份实现。
+3. **没有大量重复命令代码**：请求编码、类型转换、必填校验只有一份实现。
 4. **保留人工控制**：命令命名、风险级别、示例由 overlay 决定，不是机械推导。
 
 `overlay.yaml` 中 `internal: true` 的 operation 仍然可调用，但不出现在 help 里；
