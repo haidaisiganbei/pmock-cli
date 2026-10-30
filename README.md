@@ -62,16 +62,16 @@ npm install -g pmock-cli@latest
 预编译二进制（macOS / Linux / Windows）：
 
 ```bash
-# 以 v0.1.3 darwin-arm64 为例
+# 以 v0.1.4 darwin-arm64 为例
 curl -L -o pmock-cli.tar.gz \
-  https://github.com/haidaisiganbei/pmock-cli/releases/download/v0.1.3/pmock-cli_0.1.3_darwin_arm64.tar.gz
+  https://github.com/haidaisiganbei/pmock-cli/releases/download/v0.1.4/pmock-cli_0.1.4_darwin_arm64.tar.gz
 tar -xzf pmock-cli.tar.gz
 ./pmock-cli --version
 ```
 
 完整产物见 [Releases](https://github.com/haidaisiganbei/pmock-cli/releases)。
 
-Homebrew（本地 formula，v0.1.3 已带 checksum）：
+Homebrew（本地 formula，v0.1.4 已带 checksum）：
 
 ```bash
 brew install --formula ./Formula/pmock-cli.rb
@@ -396,7 +396,7 @@ git push origin v0.1.0
 npm 包（平台包 + wrapper）：
 
 ```bash
-VERSION=0.1.3 make npm
+VERSION=0.1.4 make npm
 ```
 
 发布前在仓库 Secrets 中配置 `NPM_TOKEN`；发布 GitHub Release 时

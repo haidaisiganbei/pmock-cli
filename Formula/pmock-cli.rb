@@ -1,26 +1,26 @@
 class PmockCli < Formula
   desc "PMOCK open API command line client"
   homepage "https://github.com/haidaisiganbei/pmock-cli"
-  version "0.1.3"
+  version "0.1.4"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/haidaisiganbei/pmock-cli/releases/download/v#{version}/pmock-cli_#{version}_darwin_arm64.tar.gz"
-      sha256 "dd2997838f2cf658c159167d36a90178bff6b95081b43f5077c4bac16856e249"
+      sha256 "688c45636dda48f260d408ae20d1eba85fd3d00d2494eab1d9817fddc70a5561"
     else
       url "https://github.com/haidaisiganbei/pmock-cli/releases/download/v#{version}/pmock-cli_#{version}_darwin_amd64.tar.gz"
-      sha256 "9442527778fe954bcc54176c4d907c0770441277f29512952b643b7831cf0b48"
+      sha256 "246c1d11a6f82af0da215cacdac9edf891364104adf7a02863d015967567f8ed"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
       url "https://github.com/haidaisiganbei/pmock-cli/releases/download/v#{version}/pmock-cli_#{version}_linux_arm64.tar.gz"
-      sha256 "b61f61b27a8273d95680c7cea0b28ffa38b8f6c40e4972f74d3d92f620e80005"
+      sha256 "581434d1bb4c9d8732def16aed396708e0fd6c1771e486425f280220ddd5336b"
     else
       url "https://github.com/haidaisiganbei/pmock-cli/releases/download/v#{version}/pmock-cli_#{version}_linux_amd64.tar.gz"
-      sha256 "386aa507a7085f06ebe276a0e1dab5f7576b4a265ab2e7ff86dbf0db90a5038a"
+      sha256 "9f1a235dcbcf5975bd854ad1f632e9dda3d0236841872fd7c1f01bcac4690b06"
     end
   end
 
@@ -29,6 +29,6 @@ class PmockCli < Formula
   end
 
   test do
-    assert_match "0.1.3", shell_output("#{bin}/pmock-cli --version")
+    assert_match "0.1.4", shell_output("#{bin}/pmock-cli --version")
   end
 end
