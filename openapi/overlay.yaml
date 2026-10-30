@@ -284,6 +284,8 @@ commands:
     path: [phone, screen]
     aliases: [screenshot]
     risk: read
+    defaults:
+      isRemove: true
     examples:
       - pmock-cli phone screen --id 123
 

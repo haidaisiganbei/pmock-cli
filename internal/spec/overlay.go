@@ -17,14 +17,15 @@ type Overlay struct {
 
 // CommandOverride overrides one operation. Op is "METHOD /path".
 type CommandOverride struct {
-	Op          string   `yaml:"op"`
-	Path        []string `yaml:"path"`
-	Aliases     []string `yaml:"aliases,omitempty"`
-	Risk        string   `yaml:"risk,omitempty"`
-	Internal    bool     `yaml:"internal,omitempty"`
-	Async       string   `yaml:"async,omitempty"`
-	OperateType string   `yaml:"operate_type,omitempty"`
-	Examples    []string `yaml:"examples,omitempty"`
+	Op          string         `yaml:"op"`
+	Path        []string       `yaml:"path"`
+	Aliases     []string       `yaml:"aliases,omitempty"`
+	Risk        string         `yaml:"risk,omitempty"`
+	Internal    bool           `yaml:"internal,omitempty"`
+	Async       string         `yaml:"async,omitempty"`
+	OperateType string         `yaml:"operate_type,omitempty"`
+	Defaults    map[string]any `yaml:"defaults,omitempty"`
+	Examples    []string       `yaml:"examples,omitempty"`
 }
 
 // LoadOverlay parses overlay.yaml.

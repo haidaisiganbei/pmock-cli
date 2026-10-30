@@ -76,13 +76,14 @@ type Command struct {
 	Summary     string
 	Description string
 
-	PathParts   []string
-	Aliases     []string
-	Risk        Risk
-	Internal    bool
-	Async       string
-	OperateType string
-	Examples    []string
+	PathParts    []string
+	Aliases      []string
+	Risk         Risk
+	Internal     bool
+	Async        string
+	OperateType  string
+	BodyDefaults map[string]any
+	Examples     []string
 
 	Flags []*Flag
 	// ComplexRequired lists required body fields that cannot be a flag
@@ -129,6 +130,14 @@ func (c *Command) LongHelp() string {
 	}
 	if c.CanWait() {
 		b.WriteString("\nWait: --wait polls the task to a terminal state (--wait-timeout, --poll-interval)")
+	}
+	if len(c.BodyDefaults) > 0 {
+		parts := make([]string, 0, len(c.BodyDefaults))
+		for k, v := range c.BodyDefaults {
+			parts = append(parts, fmt.Sprintf("%s=%v", k, v))
+		}
+		sort.Strings(parts)
+		b.WriteString("\nDefaults: " + strings.Join(parts, ", "))
 	}
 	if len(c.ComplexRequired) > 0 {
 		b.WriteString("\nRequired nested body fields (use --json): ")
@@ -190,6 +199,7 @@ func buildCommand(doc *Document, ref OperationRef, ov *CommandOverride) (*Comman
 	internal := false
 	async := ""
 	operateType := ""
+	var bodyDefaults map[string]any
 	if ov != nil {
 		if len(ov.Path) > 0 {
 			pathParts = append([]string{}, ov.Path...)
@@ -199,6 +209,7 @@ func buildCommand(doc *Document, ref OperationRef, ov *CommandOverride) (*Comman
 		internal = ov.Internal
 		async = ov.Async
 		operateType = ov.OperateType
+		bodyDefaults = ov.Defaults
 		if ov.Risk != "" {
 			risk = Risk(ov.Risk)
 		}
@@ -236,6 +247,7 @@ func buildCommand(doc *Document, ref OperationRef, ov *CommandOverride) (*Comman
 		Internal:        internal,
 		Async:           async,
 		OperateType:     operateType,
+		BodyDefaults:    bodyDefaults,
 		Examples:        examples,
 		Flags:           flags,
 		ComplexRequired: complexRequired,

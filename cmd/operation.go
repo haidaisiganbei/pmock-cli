@@ -263,6 +263,14 @@ func buildRequest(cmd *cobra.Command, sc *spec.Command, byName map[string]*spec.
 		}
 	}
 
+	if body != nil {
+		for k, v := range sc.BodyDefaults {
+			if _, ok := body[k]; !ok {
+				body[k] = v
+			}
+		}
+	}
+
 	var missing []string
 	for _, f := range sc.Flags {
 		if !f.Required {

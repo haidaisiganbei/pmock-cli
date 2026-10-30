@@ -177,3 +177,27 @@ func TestBuildRequestRejectsJSONArray(t *testing.T) {
 		t.Fatal("expected an error for a JSON array body")
 	}
 }
+
+func TestScreenRemovesScreenshotByDefault(t *testing.T) {
+	sc := testCommand(t, testCatalog(t), "phone screen")
+	cmd := prepare(t, sc)
+	_ = cmd.Flags().Set("id", "123")
+	_, _, body, err := buildRequest(cmd, sc, flagMap(sc))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if body["isRemove"] != true {
+		t.Fatalf("isRemove = %#v, want true", body["isRemove"])
+	}
+
+	cmd = prepare(t, sc)
+	_ = cmd.Flags().Set("id", "123")
+	_ = cmd.Flags().Set("is-remove", "false")
+	_, _, body, err = buildRequest(cmd, sc, flagMap(sc))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if body["isRemove"] != false {
+		t.Fatalf("explicit isRemove = %#v, want false", body["isRemove"])
+	}
+}

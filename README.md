@@ -152,7 +152,10 @@ pmock-cli phone start --id 123 --wait
 pmock-cli phone stop --id 123 --wait --wait-timeout 3m
 
 # 看屏与 UI 自动化（动作类用 code，不是 id）
+# screen 默认 isRemove=true：截图后删除手机相册里的文件，避免残留
 pmock-cli phone screen --id 123
+# 需要长期可打开的截图文件时显式保留
+pmock-cli phone screen --id 123 --is-remove=false
 pmock-cli phone action click --code A1 --pos-type 2 --pos 100,200 --wait
 pmock-cli phone action input --code A1 --text "hello" --wait
 

@@ -158,6 +158,11 @@ func TestKnownCommands(t *testing.T) {
 		t.Fatalf("rpa task get --id: %+v", f)
 	}
 
+	screen := find(t, catalog, "phone screen")
+	if screen.BodyDefaults["isRemove"] != true {
+		t.Fatalf("screen defaults = %#v", screen.BodyDefaults)
+	}
+
 	upload := find(t, catalog, "phone file upload-init")
 	if !upload.Internal {
 		t.Error("upload-init should be hidden")
