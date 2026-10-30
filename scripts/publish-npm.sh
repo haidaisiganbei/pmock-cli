@@ -34,30 +34,34 @@ publish_one() {
   echo "→ ${name}@${VERSION}"
   if npm publish "$file" --registry "$REGISTRY" --access public; then
     echo "published ${name}@${VERSION}"
-  else
-    echo "WARN: failed to publish ${name}@${VERSION}" >&2
-    failures=$((failures + 1))
+    return 0
   fi
+  echo "WARN: failed to publish ${name}@${VERSION}" >&2
+  failures=$((failures + 1))
+  return 1
 }
 
 for platform in darwin-arm64 darwin-x64 linux-x64 linux-arm64 win32-x64; do
   publish_one "pmock-cli-${platform}" "$DIR/pmock-cli-${platform}-${VERSION}.tgz"
 done
 
-publish_one "pmock-cli" "$DIR/pmock-cli-${VERSION}.tgz"
+if publish_one "pmock-cli" "$DIR/pmock-cli-${VERSION}.tgz"; then
+  echo
+  echo "wrapper available: npm install -g pmock-cli@${VERSION}"
+  if [ "$failures" -gt 0 ]; then
+    echo "note: $failures platform package(s) still need attention; wrapper installs only matching platforms." >&2
+  fi
+  exit 0
+fi
 
-# npm may take a few seconds to make a newly published version visible.
+# The wrapper publish reported failure; npm may still be indexing it. Give the
+# registry another minute before failing the job.
 for _ in $(seq 1 20); do
   if npm view "pmock-cli@${VERSION}" version --registry "$REGISTRY" >/dev/null 2>&1; then
-    echo
-    echo "wrapper available: npm install -g pmock-cli@${VERSION}"
-    if [ "$failures" -gt 0 ]; then
-      echo "note: $failures platform package(s) still need attention; wrapper installs only matching platforms." >&2
-    fi
+    echo "wrapper is visible after all"
     exit 0
   fi
   sleep 3
 done
-
 echo "wrapper was not published" >&2
 exit 1
