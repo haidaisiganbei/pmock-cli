@@ -43,7 +43,7 @@ package:
 	./scripts/package.sh
 
 npm:
-	VERSION=$${VERSION:-0.1.0} ./scripts/build-npm.sh
+	VERSION=$${VERSION:-0.1.4} ./scripts/build-npm.sh
 
 clean:
 	rm -rf bin dist
