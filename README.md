@@ -72,15 +72,6 @@ pmock-cli phone list --page-num 1 --page-size 100
 pmock-cli phone list --format table
 ```
 
-### 使用测试环境
-
-```bash
-pmock-cli config init --base-url "https://user.ts.pmock.cn/api"
-```
-
-测试环境和正式环境的团队、AK/SK 完全独立。切换环境时，AK/SK 也要使用对应环境的，
-否则会返回 `10123 无效的开发者编号`。
-
 ---
 
 ## 配置
@@ -121,15 +112,17 @@ export PMOCK_TIMEOUT="30s"
 
 ### 多套配置
 
+为不同团队或账号保存独立配置：
+
 ```bash
-export PMOCK_CLI_CONFIG="$HOME/.pmock-cli/test.json"
-pmock-cli config init --base-url "https://user.ts.pmock.cn/api"
+export PMOCK_CLI_CONFIG="$HOME/.pmock-cli/team-b.json"
+pmock-cli config init
 ```
 
 之后固定使用：
 
 ```bash
-export PMOCK_CLI_CONFIG="$HOME/.pmock-cli/test.json"
+export PMOCK_CLI_CONFIG="$HOME/.pmock-cli/team-b.json"
 ```
 
 ---
@@ -363,7 +356,7 @@ pmock-cli config show
 
 确认：
 
-- base URL 是测试还是正式
+- base URL 是否正确
 - AK/SK 是否属于同一环境的同一团队
 - 客户端当前选中的团队是否一致
 
