@@ -87,6 +87,12 @@ pmock-cli phone list --page-size 1
 in-process CLI 执行。新增 action 时不需要另写一套 API 客户端，只要保证
 命令在 catalog 中可见。
 
+MCP SDK 把工具参数解码进 `map[string]any`，JSON 数字一律变成 `float64`。
+手机、任务等 64 位 ID 超过 2^53 后会在这一步丢精度，所以约定调用方用
+字符串传 ID（`"id": "1900000000000000123"`）；`formatMCPParam` 对 ≥2^53 的
+数字直接报错，避免把四舍五入后的 ID 发给 API。改参数处理时请保留该保护，
+并覆盖 `TestBuildCLIArgsLargeIDs`。
+
 ## 发布
 
 ### GitHub Release

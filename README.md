@@ -334,17 +334,28 @@ pmock-cli rpa task add --template-id 9 --name daily --json @task.json --wait
 ```json
 {
   "action": "start",
-  "params": { "id": 123, "wait": true }
+  "params": { "id": "1900000000000000123", "wait": true }
 }
 ```
 
 - 支持 `pmock_phone`、`pmock_phone_action`、`pmock_phone_file`、`pmock_app`、`pmock_network`、`pmock_rpa_template`、`pmock_rpa_task`、`pmock_product`、`pmock_brand`、`pmock_team`、`pmock_task`、`pmock_account`
 - `pmock_help` 可以查询任意命令的完整参数
 - 删除、重置等破坏性动作需要 `params.yes = true`
+- **64 位 ID 必须用字符串传**（`"id": "1900000000000000123"`），不要写成 JSON 数字。MCP SDK 按 `float64` 解析数字，超过 2^53 会丢精度，服务端只会看到四舍五入后的 ID，最终报「手机不存在」。直接调用 CLI 时 `--id` 是字符串参数，不受影响
 
 ---
 
 ## 故障排查
+
+### MCP 报「手机不存在」，但 CLI 直接调用正常
+
+大整数 ID 被 JSON 数字精度截断了。MCP 工具参数里的 ID 要加引号：
+
+```json
+{ "action": "start", "params": { "id": "1900000000000000123" } }
+```
+
+数字形式在 2^53 以上会丢失末尾几位（例如 `1900000000000000123` 变成 `1900000000000000000`），API 自然查不到这台手机。新版 CLI 遇到这种数字会直接报错并提示改用字符串，而不是把错误 ID 发出去。`--json` 里嵌套的 ID 同理。
 
 ### `10123 无效的开发者编号`
 

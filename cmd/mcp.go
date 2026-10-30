@@ -29,7 +29,10 @@ const mcpInstructions = "PMOCK cloud phone management via pmock-cli. " +
 	"Each tool dispatches on an 'action' parameter; pass CLI flags via the 'params' object " +
 	"(keys are flag names without '--', values are string/number/boolean/array; nested " +
 	"objects can be passed as the 'json' key). Call pmock_help before an unfamiliar action. " +
-	"Destructive actions require params.yes=true."
+	"Destructive actions require params.yes=true. " +
+	"64-bit ids (phone, task, rpa, user ids) must be passed as JSON strings, e.g. " +
+	"params.id=\"1900000000000000123\": JSON numbers are decoded as float64 and lose digits " +
+	"at or above 2^53, which the API rejects as a non-existent phone."
 
 const mcpLong = `Run pmock-cli as a Model Context Protocol (MCP) server over stdio.
 
@@ -40,6 +43,11 @@ cannot drift from the CLI.
 
 Authentication is shared with the CLI: ~/.pmock-cli/config.json or
 PMOCK_ACCESS_KEY / PMOCK_SECRET_KEY.
+
+64-BIT IDS: tool params travel as JSON, and JSON numbers lose precision above
+2^53. Pass phone, task and RPA ids as quoted strings, for example
+{"action":"start","params":{"id":"1900000000000000123"}}. A bare number of that
+size is rejected instead of being sent as a rounded id.
 
 While the server is running stdout carries the MCP protocol only; diagnostics
 go to stderr.
@@ -61,7 +69,7 @@ CLIENT CONFIGURATION:
 // mcpArgs is the single input schema shared by all routed tools.
 type mcpArgs struct {
 	Action string         `json:"action" jsonschema:"the action to execute; must be one of the actions listed in this tool's description"`
-	Params map[string]any `json:"params,omitempty" jsonschema:"CLI flags without the leading --; values may be string, number, boolean, array, or a nested object for --json"`
+	Params map[string]any `json:"params,omitempty" jsonschema:"CLI flags without the leading --; values may be string, number, boolean, array, or a nested object for --json. Pass 64-bit ids as strings (e.g. id=\"1900000000000000123\"); numeric ids at or above 2^53 lose precision."`
 }
 
 type helpArgs struct {
@@ -428,6 +436,14 @@ func buildCLIArgs(path []string, params map[string]any) ([]string, error) {
 	return argv, nil
 }
 
+// maxExactJSONInteger is the largest integer magnitude a float64 can hold
+// without gaps (2^53). The MCP SDK decodes tool arguments into map[string]any,
+// so every JSON number arrives as float64; at or above this limit a large id
+// may already be a rounded value by the time we see it (2^53+1 rounds down to
+// 2^53). Refusing those values turns a silent wrong-id call ("phone does not
+// exist") into an actionable error.
+const maxExactJSONInteger = 1 << 53
+
 func formatMCPParam(key string, v any) (string, error) {
 	switch t := v.(type) {
 	case nil:
@@ -437,7 +453,12 @@ func formatMCPParam(key string, v any) (string, error) {
 	case bool:
 		return strconv.FormatBool(t), nil
 	case float64:
-		if t == math.Trunc(t) && math.Abs(t) < 1e15 {
+		if t == math.Trunc(t) {
+			if math.Abs(t) >= maxExactJSONInteger {
+				return "", fmt.Errorf("%s is too large for a JSON number and may have lost digits; "+
+					"pass 64-bit ids as quoted strings, e.g. \"%s\": \"1900000000000000123\"",
+					strconv.FormatFloat(t, 'f', -1, 64), key)
+			}
 			return strconv.FormatInt(int64(t), 10), nil
 		}
 		return strconv.FormatFloat(t, 'f', -1, 64), nil
@@ -467,12 +488,18 @@ func formatMCPParam(key string, v any) (string, error) {
 			}
 			return strings.Join(parts, ","), nil
 		}
+		if err := checkNestedJSONNumbers(t, key); err != nil {
+			return "", err
+		}
 		b, err := json.Marshal(t)
 		if err != nil {
 			return "", err
 		}
 		return string(b), nil
 	case map[string]any:
+		if err := checkNestedJSONNumbers(t, key); err != nil {
+			return "", err
+		}
 		b, err := json.Marshal(t)
 		if err != nil {
 			return "", err
@@ -481,6 +508,37 @@ func formatMCPParam(key string, v any) (string, error) {
 	default:
 		return fmt.Sprint(t), nil
 	}
+}
+
+// checkNestedJSONNumbers rejects IDs hidden inside a --json payload. The MCP
+// SDK already decoded them as float64, so a value at or above 2^53 cannot be
+// trusted as the caller's original digits.
+func checkNestedJSONNumbers(v any, path string) error {
+	switch t := v.(type) {
+	case float64:
+		if t == math.Trunc(t) && math.Abs(t) >= maxExactJSONInteger {
+			return fmt.Errorf("%s = %s is too large for an exact JSON number; "+
+				"pass ids as quoted strings", path, strconv.FormatFloat(t, 'f', -1, 64))
+		}
+	case []any:
+		for i, e := range t {
+			if err := checkNestedJSONNumbers(e, fmt.Sprintf("%s[%d]", path, i)); err != nil {
+				return err
+			}
+		}
+	case map[string]any:
+		keys := make([]string, 0, len(t))
+		for k := range t {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			if err := checkNestedJSONNumbers(t[k], path+"."+k); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func isScalarArray(arr []any) bool {

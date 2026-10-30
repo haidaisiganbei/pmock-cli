@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -92,6 +93,53 @@ func TestBuildCLIArgs(t *testing.T) {
 
 	if _, err := buildCLIArgs([]string{"phone", "list"}, map[string]any{"bad name": 1}); err == nil {
 		t.Fatal("expected an error for an invalid flag name")
+	}
+}
+
+func TestBuildCLIArgsLargeIDs(t *testing.T) {
+	// 2^53 is the largest float64 integer with no gaps; anything above it may
+	// already be rounded by the MCP SDK, so it must be rejected, not truncated.
+	const bigID = "9007199254740993"
+	rounded := float64(1<<53 + 2)
+
+	for _, id := range []float64{float64(1 << 53), rounded} {
+		if _, err := buildCLIArgs([]string{"phone", "start"}, map[string]any{"id": id}); err == nil ||
+			!strings.Contains(err.Error(), "quoted strings") {
+			t.Fatalf("numeric id %v err = %v, want a precision error", id, err)
+		}
+	}
+
+	args, err := buildCLIArgs([]string{"phone", "start"}, map[string]any{"id": bigID})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := "--id=" + bigID; strings.Join(args, " ") != "phone start "+want {
+		t.Fatalf("string id args = %v", args)
+	}
+
+	args, err = buildCLIArgs([]string{"phone", "start"}, map[string]any{"id": json.Number(bigID)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := "--id=" + bigID; strings.Join(args, " ") != "phone start "+want {
+		t.Fatalf("json.Number id args = %v", args)
+	}
+
+	_, err = buildCLIArgs([]string{"rpa", "task", "add"}, map[string]any{
+		"json": map[string]any{"taskList": []any{map[string]any{"phoneId": rounded}}},
+	})
+	if err == nil || !strings.Contains(err.Error(), "json.taskList[0].phoneId") {
+		t.Fatalf("nested numeric id err = %v, want a precision error with a path", err)
+	}
+
+	args, err = buildCLIArgs([]string{"rpa", "task", "add"}, map[string]any{
+		"json": map[string]any{"taskList": []any{map[string]any{"phoneId": json.Number(bigID)}}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(strings.Join(args, " "), `"phoneId":`+bigID) {
+		t.Fatalf("nested json.Number args = %v", args)
 	}
 }
 
